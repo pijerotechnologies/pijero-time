@@ -54,7 +54,6 @@ app.post("/command", async (req, res) => {
 
   let result = await api.callAPIMethod("views.open", view);
 
-  console.log(result);
   debug("views.open: %o", result);
   return res.send("");
 });
@@ -70,7 +69,7 @@ app.post("/interactive", (req, res) => {
     return res.status(404).send();
   }
   const body = JSON.parse(req.body.payload);
-  console.log(body);
+
   res.send("");
   ticket.create(body.user.id, body.view);
 });

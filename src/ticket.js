@@ -8,12 +8,24 @@ const payloads = require("./payloads");
  */
 const sendConfirmation = async (ticket) => {
   // open a DM channel for that user
-  console.log(ticket);
+
   let channel = await api.callAPIMethod("conversations.open", {
     users: [ticket.userId],
   });
 
-  console.log(channel);
+  let message = payloads.confirmation({
+    channel_id: channel.channel.id,
+    title: `selected users: ${ticket.selectedUsers}`,
+  });
+
+  let result = await api.callAPIMethod("chat.postMessage", message);
+  debug("sendConfirmation: %o", result);
+};
+
+const sendTestMsg = async (users) => {
+  let channel = await api.callAPIMethod("conversations.open", {
+    users,
+  });
 
   let message = payloads.confirmation({
     channel_id: channel.channel.id,
@@ -21,7 +33,6 @@ const sendConfirmation = async (ticket) => {
   });
 
   let result = await api.callAPIMethod("chat.postMessage", message);
-  debug("sendConfirmation: %o", result);
 };
 
 // Create helpdesk ticket. Call users.find to get the user's email address
@@ -33,12 +44,12 @@ const create = async (userId, view) => {
     user: userId,
   });
 
+  console.log(values.reminder_block);
+
   await sendConfirmation({
     userId,
+    selectedUsers,
   });
-
-  console.log({ values });
-  console.log({ result });
 };
 
 module.exports = { create, sendConfirmation };
