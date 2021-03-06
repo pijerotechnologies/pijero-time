@@ -11,7 +11,7 @@ router.get("/", async function (req, res, next) {
   const lastClose = result.data["Time Series (Daily)"][lastRefresh]["4. close"];
 
   await Axios.post(
-    "https://hooks.slack.com/services/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",
+    "https://hooks.slack.com/services/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",
     {
       blocks: [
         {
