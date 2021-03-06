@@ -8,15 +8,16 @@ const payloads = require("./payloads");
  */
 const sendConfirmation = async (ticket) => {
   // open a DM channel for that user
-  let channel = await api.callAPIMethod("im.open", {
-    user: ticket.userId,
+  console.log(ticket);
+  let channel = await api.callAPIMethod("conversations.open", {
+    users: [ticket.userId],
   });
+
+  console.log(channel);
 
   let message = payloads.confirmation({
     channel_id: channel.channel.id,
-    title: ticket.title,
-    description: ticket.description,
-    urgency: ticket.urgency,
+    title: "test",
   });
 
   let result = await api.callAPIMethod("chat.postMessage", message);
@@ -30,6 +31,10 @@ const create = async (userId, view) => {
 
   let result = await api.callAPIMethod("users.info", {
     user: userId,
+  });
+
+  await sendConfirmation({
+    userId,
   });
 
   console.log({ values });
