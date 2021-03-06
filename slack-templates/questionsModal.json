@@ -27,7 +27,7 @@
 			"type": "input",
 			"element": {
 				"type": "plain_text_input",
-				"action_id": "plain_text_input-action"
+				"action_id": "standup_question_one"
 			},
 			"label": {
 				"type": "plain_text",
@@ -39,7 +39,7 @@
 			"type": "input",
 			"element": {
 				"type": "plain_text_input",
-				"action_id": "plain_text_input-action"
+				"action_id": "standup_question_two"
 			},
 			"label": {
 				"type": "plain_text",
@@ -51,7 +51,7 @@
 			"type": "input",
 			"element": {
 				"type": "plain_text_input",
-				"action_id": "plain_text_input-action"
+				"action_id": "standup_question_three"
 			},
 			"label": {
 				"type": "plain_text",
