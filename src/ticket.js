@@ -15,7 +15,7 @@ const sendConfirmation = async (ticket) => {
 
   let message = payloads.confirmation({
     channel_id: channel.channel.id,
-    title: `selected users: ${ticket.selectedUsers}`,
+    title: `selected users: `,
   });
 
   let result = await api.callAPIMethod("chat.postMessage", message);
@@ -48,7 +48,6 @@ const create = async (userId, view) => {
 
   await sendConfirmation({
     userId,
-    selectedUsers,
   });
 };
 
