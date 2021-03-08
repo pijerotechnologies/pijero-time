@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const ticket = require("./ticket");
+const standupconfig = require("./standupConfig");
 const signature = require("./verifySignature");
 const api = require("./api");
 const payloads = require("./payloads");
@@ -62,7 +62,7 @@ app.post("/command", async (req, res) => {
 
 /*
  * Endpoint to receive the dialog submission. Checks the verification token
- * and creates a Helpdesk ticket
+ * and creates a Helpdesk standupconfig
  */
 app.post("/interactive", (req, res) => {
     // Verify the signing secret
@@ -73,7 +73,7 @@ app.post("/interactive", (req, res) => {
     const body = JSON.parse(req.body.payload);
 
     res.send("");
-    ticket.create(body.user.id, body.view);
+    standupconfig.create(body.user.id, body.view);
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
