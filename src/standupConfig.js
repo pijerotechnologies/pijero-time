@@ -1,4 +1,6 @@
 const debug = require("debug")("slash-command-template:standupconfig");
+const { zonedTimeToUtc, utcToZonedTime, format } = require("date-fns-tz");
+
 const api = require("./api");
 const payloads = require("./payloads");
 
@@ -43,6 +45,13 @@ const create = async (userId, view) => {
     let result = await api.callAPIMethod("users.info", {
         user: userId,
     });
+
+    const date = new Date();
+    const timeZone = result.user.tz;
+    const zonedDate = new Date().toLocaleString("en-US", {
+        timeZone,
+    });
+    console.log({ zonedDate });
 
     const reminderTime = values.reminder_picker_block.reminder_time;
     const reminderTimeMinutes =
