@@ -50,7 +50,7 @@ app.post("/command", async (req, res) => {
 
     // create the modal payload - includes the dialog structure, Slack API token,
     // and trigger ID
-    let view = payloads.modal({
+    let view = payloads.standupConfig({
         trigger_id,
     });
 
