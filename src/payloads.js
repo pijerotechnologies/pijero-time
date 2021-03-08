@@ -172,7 +172,7 @@ module.exports = {
                         type: "input",
                         element: {
                             type: "timepicker",
-                            initial_time: "13:37",
+                            initial_time: "09:00",
                             placeholder: {
                                 type: "plain_text",
                                 text: "Select time",
@@ -245,13 +245,13 @@ module.exports = {
                         type: "input",
                         element: {
                             type: "timepicker",
-                            initial_time: "13:37",
+                            initial_time: "09:00",
                             placeholder: {
                                 type: "plain_text",
                                 text: "Select time",
                                 emoji: true,
                             },
-                            action_id: "timepicker-action",
+                            action_id: "standup_picker",
                         },
                         label: {
                             type: "plain_text",
@@ -260,7 +260,7 @@ module.exports = {
                         },
                     },
                     {
-                        block_id: "minutes_picker_block",
+                        block_id: "standup_minutes_picker_block",
                         type: "section",
                         text: {
                             type: "mrkdwn",
@@ -307,7 +307,7 @@ module.exports = {
                                     value: "45",
                                 },
                             ],
-                            action_id: "reminder_time_minutes",
+                            action_id: "standup_minutes",
                         },
                     },
                     {
@@ -376,7 +376,7 @@ module.exports = {
                                     value: "sunday",
                                 },
                             ],
-                            action_id: "checkboxes-action",
+                            action_id: "days_picker",
                         },
                         label: {
                             type: "plain_text",
@@ -397,7 +397,7 @@ module.exports = {
                                 text: "Select users",
                                 emoji: true,
                             },
-                            action_id: "team_members",
+                            action_id: "users",
                         },
                         label: {
                             type: "plain_text",

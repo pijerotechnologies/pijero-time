@@ -44,7 +44,21 @@ const create = async (userId, view) => {
         user: userId,
     });
 
-    console.log(values);
+    const reminderTime = values.reminder_picker_block.reminder_time;
+    const reminderTimeMinutes =
+        values.reminder_minutes_block.reminder_time_minutes;
+    const standupTime = values.standup_picker_block.standup_picker;
+    const standupTimeMinutes =
+        values.standup_minutes_picker_block.standup_minutes;
+    const daysPicker = values.days_picker_block.days_picker;
+    const usersPicker = values.users_picker_block.users;
+
+    console.log({ reminderTime });
+    console.log({ reminderTimeMinutes });
+    console.log({ standupTime });
+    console.log({ standupTimeMinutes });
+    console.log({ daysPicker });
+    console.log({ usersPicker });
 
     await sendConfirmation({
         userId,
