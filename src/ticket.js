@@ -44,7 +44,7 @@ const create = async (userId, view) => {
     user: userId,
   });
 
-  console.log(values.reminder_block);
+  console.log(values);
 
   await sendConfirmation({
     userId,

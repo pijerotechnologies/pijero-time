@@ -169,6 +169,7 @@ module.exports = {
             type: "divider",
           },
           {
+            block_id: "reminder_picker_block",
             type: "input",
             element: {
               type: "timepicker",
@@ -190,7 +191,7 @@ module.exports = {
             type: "divider",
           },
           {
-            block_id: "reminder_block",
+            block_id: "reminder_minutes_block",
             type: "section",
             text: {
               type: "mrkdwn",
@@ -241,6 +242,7 @@ module.exports = {
             },
           },
           {
+            block_id: "standup_picker_block",
             type: "input",
             element: {
               type: "timepicker",
@@ -259,6 +261,7 @@ module.exports = {
             },
           },
           {
+            block_id: "minutes_picker_block",
             type: "section",
             text: {
               type: "mrkdwn",
@@ -312,6 +315,7 @@ module.exports = {
             type: "divider",
           },
           {
+            block_id: "days_picker_block",
             type: "input",
             element: {
               type: "checkboxes",
@@ -385,6 +389,7 @@ module.exports = {
             type: "divider",
           },
           {
+            block_id: "users_picker_block",
             type: "input",
             element: {
               type: "multi_users_select",
