@@ -4,6 +4,29 @@ const { zonedTimeToUtc, utcToZonedTime, format } = require("date-fns-tz");
 const api = require("./api");
 const payloads = require("./payloads");
 
+const fs = require("fs");
+
+async function readData(file) {
+    const data = await fs.readFileSync(file);
+    const formattedData = JSON.parse(data);
+
+    return formattedData;
+}
+
+const writeData = (file, data) => {
+    const formattedData = JSON.stringify(data);
+    fs.writeFile("database/data.json", formattedData, callback);
+
+    function callback(err) {
+        console.log(err);
+    }
+};
+
+readData("database/data.json").then((data) => {
+    console.log("DATABASE DATA");
+    console.log(data);
+});
+
 /*
  *  Send standupconfig creation confirmation via
  *  chat.postMessage to the user who created it
@@ -41,6 +64,8 @@ const sendTestMsg = async (users) => {
 // from their user ID
 const create = async (userId, view) => {
     let values = view.state.values;
+
+    writeData("database/data.json", values);
 
     let result = await api.callAPIMethod("users.info", {
         user: userId,
