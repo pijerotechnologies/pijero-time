@@ -72,20 +72,24 @@ app.post("/interactive", async (req, res) => {
   }
 
   const body = JSON.parse(req.body.payload);
+  console.log(body);
+  switch (body.type) {
+    case "block_actions":
+      let view = payloads.standupQuestions({
+        trigger_id: body.trigger_id,
+      });
 
-  if (body.type === "block_actions") {
-    let view = payloads.standupQuestions({
-      trigger_id: body.trigger_id,
-    });
+      let result = await api.callAPIMethod("views.open", view);
 
-    let result = await api.callAPIMethod("views.open", view);
+      debug("views.open: %o", result);
+      return res.send("");
+      break;
 
-    debug("views.open: %o", result);
-    return res.send("");
+    case "view_submission":
+      res.send("");
+      standupconfig.create(body.user.id, body.view);
+      break;
   }
-
-  res.send("");
-  standupconfig.create(body.user.id, body.view);
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
