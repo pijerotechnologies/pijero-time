@@ -21,10 +21,10 @@
                 {
                     "text": {
                         "type": "plain_text",
-                        "text": "Wednesday",
+                        "text": "Monday",
                         "emoji": true
                     },
-                    "value": "wednesday"
+                    "value": "monday"
                 }
             ]
         }
@@ -32,8 +32,9 @@
     "users_picker_block": {
         "users": {
             "type": "multi_users_select",
-            "selected_users": ["U01QEHC33TM"]
+            "selected_users": ["U01QL2BDN8H"]
         }
     },
-    "clientTime": "3/9/2021, 7:57:08 PM"
+    "clientTime": "3/9/2021, 8:22:42 PM",
+    "clientTimeZone": "Europe/Athens"
 }

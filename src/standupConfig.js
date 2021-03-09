@@ -52,10 +52,14 @@ const create = async (userId, view) => {
             timeZone,
         }),
     };
+    const timeZoneObj = {
+        clientTimeZone: timeZone,
+    };
     const values = view.state.values;
     const data = {
         ...values,
         ...zonedDate,
+        ...timeZoneObj,
     };
 
     writeData(filePaths.standupConfig, data);

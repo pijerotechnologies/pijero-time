@@ -2,15 +2,33 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const debug = require("debug")("slash-command-template:index");
+const app = express();
+
+const cron = require("node-cron");
+
 const standupconfig = require("./standupConfig");
 const signature = require("./verifySignature");
 const api = require("./api");
 const payloads = require("./payloads");
-const debug = require("debug")("slash-command-template:index");
+const { filePaths } = require("./constants");
+const { readData } = require("./utils/fileWrite");
 
-const app = express();
+const cronLogic = () => {
+    readData(filePaths.standupConfig)
+        .then((data) => {
+            const currentTime = new Date();
+            console.log({ data });
+            console.log({ currentTime });
+        })
+        .catch(() => {
+            throw new Error("Error reading data");
+        });
+};
 
-const cron = require("node-cron");
+cron.schedule("* * * * *", () => {
+    cronLogic();
+});
 
 /*
  * Parse application/x-www-form-urlencoded && application/json
@@ -28,6 +46,7 @@ app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
 app.use(bodyParser.json({ verify: rawBodyBuffer }));
 
 app.get("/", (req, res) => {
+    cronLogic();
     res.send(
         "<h2>The Slash Command and Dialog app is running</h2> <p>Follow the" +
             " instructions in the README to configure the Slack App and your environment variables.</p>"
@@ -82,8 +101,4 @@ const server = app.listen(process.env.PORT || 5000, () => {
         server.address().port,
         app.settings.env
     );
-});
-
-cron.schedule("* * * * *", () => {
-    console.log("running a task every minute");
 });
