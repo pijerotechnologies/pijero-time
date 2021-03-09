@@ -70,7 +70,6 @@ module.exports = {
             label: {
               type: "plain_text",
               text: "What did you do yesterday?",
-              emoji: true,
             },
           },
           {
@@ -82,7 +81,6 @@ module.exports = {
             label: {
               type: "plain_text",
               text: "What will you do today?",
-              emoji: true,
             },
           },
           {
@@ -94,7 +92,6 @@ module.exports = {
             label: {
               type: "plain_text",
               text: "Do you have any blockers?",
-              emoji: true,
             },
           },
         ],

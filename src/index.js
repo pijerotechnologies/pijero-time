@@ -72,7 +72,7 @@ app.post("/interactive", async (req, res) => {
   }
 
   const body = JSON.parse(req.body.payload);
-  console.log(body);
+
   switch (body.type) {
     case "block_actions":
       let view = payloads.standupQuestions({
@@ -85,9 +85,15 @@ app.post("/interactive", async (req, res) => {
       return res.send("");
       break;
 
+    // case "view_submission":
+    //   res.send("");
+    //   standupconfig.create(body.user.id, body.view);
+    //   break;
+
     case "view_submission":
+      console.log(body.view.blocks);
       res.send("");
-      standupconfig.create(body.user.id, body.view);
+      //   standupconfig.handleUserInteraction(body.user.id, body.view);
       break;
   }
 });

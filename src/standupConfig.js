@@ -77,6 +77,17 @@ const initStandupQuestions = async (usersArray) => {
 
 // Create helpdesk standupconfig. Call users.find to get the user's email address
 // from their user ID
+
+const handleUserInteraction = async (userId, view) => {
+  let values = view.state.values;
+
+  let userData = await api.callAPIMethod("users.info", {
+    user: userId,
+  });
+
+  console.log(values);
+  console.log(userData);
+};
 const create = async (userId, view) => {
   let values = view.state.values;
 
