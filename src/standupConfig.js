@@ -7,96 +7,89 @@ const payloads = require("./payloads");
 const fs = require("fs");
 
 async function readData(file) {
-    const data = await fs.readFileSync(file);
-    const formattedData = JSON.parse(data);
+  const data = await fs.readFileSync(file);
+  const formattedData = JSON.parse(data);
 
-    return formattedData;
+  return formattedData;
 }
 
 const writeData = (file, data) => {
-    const formattedData = JSON.stringify(data);
-    fs.writeFile("database/data.json", formattedData, callback);
+  const formattedData = JSON.stringify(data);
+  fs.writeFile("database/data.json", formattedData, callback);
 
-    function callback(err) {
-        console.log(err);
-    }
+  function callback(err) {
+    console.log(`err ${err}`);
+  }
 };
 
 readData("database/data.json").then((data) => {
-    console.log("DATABASE DATA");
-    console.log(data);
+  console.log("DATABASE DATA");
+  console.log(data);
 });
 
 /*
  *  Send standupconfig creation confirmation via
  *  chat.postMessage to the user who created it
  */
-const sendConfirmation = async (standupconfig) => {
-    // open a DM channel for that user
+const sendConfirmation = async (userId) => {
+  let channel = await api.callAPIMethod("conversations.open", {
+    users: [userId],
+  });
 
-    let channel = await api.callAPIMethod("conversations.open", {
-        users: [standupconfig.userId],
-    });
+  let message = payloads.confirmation({
+    channel_id: channel.channel.id,
+    title: `selected users: `,
+  });
 
-    let message = payloads.confirmation({
-        channel_id: channel.channel.id,
-        title: `selected users: `,
-    });
-
-    let result = await api.callAPIMethod("chat.postMessage", message);
-    debug("sendConfirmation: %o", result);
+  let result = await api.callAPIMethod("chat.postMessage", message);
+  debug("sendConfirmation: %o", result);
 };
 
-const sendTestMsg = async (users) => {
-    let channel = await api.callAPIMethod("conversations.open", {
-        users,
-    });
+const sendMessageToUsers = async (usersArray) => {
+  console.log(usersArray);
+  let channel = await api.callAPIMethod("conversations.open", {
+    users: usersArray,
+  });
 
-    let message = payloads.confirmation({
-        channel_id: channel.channel.id,
-        title: "test",
-    });
+  let message = payloads.confirmation({
+    channel_id: channel.channel.id,
+    title: `GET READY FOR THE SETUP`,
+  });
 
-    let result = await api.callAPIMethod("chat.postMessage", message);
+  let result = await api.callAPIMethod("chat.postMessage", message);
+  debug("sendConfirmation: %o", result);
+};
+
+const initStandupQuestions = async (usersArray) => {
+  console.log(usersArray);
+  let channel = await api.callAPIMethod("conversations.open", {
+    users: usersArray,
+  });
+
+  let message = payloads.standupQuestionsInit({
+    channel_id: channel.channel.id,
+    title: `PARE YOU READY TO ANSWER QUESTIONS?`,
+  });
+
+  let result = await api.callAPIMethod("chat.postMessage", message);
+  debug("sendConfirmation: %o", result);
 };
 
 // Create helpdesk standupconfig. Call users.find to get the user's email address
 // from their user ID
 const create = async (userId, view) => {
-    let values = view.state.values;
+  let values = view.state.values;
 
-    writeData("database/data.json", values);
+  let result = await api.callAPIMethod("users.info", {
+    user: userId,
+  });
 
-    let result = await api.callAPIMethod("users.info", {
-        user: userId,
-    });
+  // await sendConfirmation(userId);
 
-    const date = new Date();
-    const timeZone = result.user.tz;
-    const zonedDate = new Date().toLocaleString("en-US", {
-        timeZone,
-    });
-    console.log({ zonedDate });
+  const selectedUsers = values.users_picker_block.users.selected_users;
+  await initStandupQuestions(selectedUsers);
 
-    const reminderTime = values.reminder_picker_block.reminder_time;
-    const reminderTimeMinutes =
-        values.reminder_minutes_block.reminder_time_minutes;
-    const standupTime = values.standup_picker_block.standup_picker;
-    const standupTimeMinutes =
-        values.standup_minutes_picker_block.standup_minutes;
-    const daysPicker = values.days_picker_block.days_picker;
-    const usersPicker = values.users_picker_block.users;
-
-    console.log({ reminderTime });
-    console.log({ reminderTimeMinutes });
-    console.log({ standupTime });
-    console.log({ standupTimeMinutes });
-    console.log({ daysPicker });
-    console.log({ usersPicker });
-
-    await sendConfirmation({
-        userId,
-    });
+  await writeData("database/data.json", values);
 };
 
 module.exports = { create, sendConfirmation };

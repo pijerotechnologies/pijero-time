@@ -19,19 +19,19 @@ const cron = require("node-cron");
  */
 
 const rawBodyBuffer = (req, res, buf, encoding) => {
-    if (buf && buf.length) {
-        req.rawBody = buf.toString(encoding || "utf8");
-    }
+  if (buf && buf.length) {
+    req.rawBody = buf.toString(encoding || "utf8");
+  }
 };
 
 app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
 app.use(bodyParser.json({ verify: rawBodyBuffer }));
 
 app.get("/", (req, res) => {
-    res.send(
-        "<h2>The Slash Command and Dialog app is running</h2> <p>Follow the" +
-            " instructions in the README to configure the Slack App and your environment variables.</p>"
-    );
+  res.send(
+    "<h2>The Slash Command and Dialog app is running</h2> <p>Follow the" +
+      " instructions in the README to configure the Slack App and your environment variables.</p>"
+  );
 });
 
 /*
@@ -39,51 +39,63 @@ app.get("/", (req, res) => {
  * Checks verification token and opens a dialog to capture more info.
  */
 app.post("/command", async (req, res) => {
-    // Verify the signing secret
-    if (!signature.isVerified(req)) {
-        debug("Verification token mismatch");
-        return res.status(404).send();
-    }
+  // Verify the signing secret
+  if (!signature.isVerified(req)) {
+    debug("Verification token mismatch");
+    return res.status(404).send();
+  }
 
-    // extract the slash command text, and trigger ID from payload
-    const { trigger_id } = req.body;
+  // extract the slash command text, and trigger ID from payload
+  const { trigger_id } = req.body;
 
-    // create the modal payload - includes the dialog structure, Slack API token,
-    // and trigger ID
-    let view = payloads.standupConfig({
-        trigger_id,
-    });
+  // create the modal payload - includes the dialog structure, Slack API token,
+  // and trigger ID
+  let view = payloads.standupConfig({
+    trigger_id,
+  });
 
-    let result = await api.callAPIMethod("views.open", view);
+  let result = await api.callAPIMethod("views.open", view);
 
-    debug("views.open: %o", result);
-    return res.send("");
+  debug("views.open: %o", result);
+  return res.send("");
 });
 
 /*
  * Endpoint to receive the dialog submission. Checks the verification token
  * and creates a Helpdesk standupconfig
  */
-app.post("/interactive", (req, res) => {
-    // Verify the signing secret
-    if (!signature.isVerified(req)) {
-        debug("Verification token mismatch");
-        return res.status(404).send();
-    }
-    const body = JSON.parse(req.body.payload);
+app.post("/interactive", async (req, res) => {
+  // Verify the signing secret
+  if (!signature.isVerified(req)) {
+    debug("Verification token mismatch");
+    return res.status(404).send();
+  }
 
-    res.send("");
-    standupconfig.create(body.user.id, body.view);
+  const body = JSON.parse(req.body.payload);
+
+  if (body.type === "block_actions") {
+    let view = payloads.standupQuestions({
+      trigger_id: body.trigger_id,
+    });
+
+    let result = await api.callAPIMethod("views.open", view);
+
+    debug("views.open: %o", result);
+    return res.send("");
+  }
+
+  res.send("");
+  standupconfig.create(body.user.id, body.view);
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
-    console.log(
-        "Express server listening on port %d in %s mode",
-        server.address().port,
-        app.settings.env
-    );
+  console.log(
+    "Express server listening on port %d in %s mode",
+    server.address().port,
+    app.settings.env
+  );
 });
 
 cron.schedule("* * * * *", () => {
-    console.log("running a task every minute");
+  console.log("running a task every minute");
 });
