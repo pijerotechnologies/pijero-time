@@ -4,6 +4,7 @@ const { zonedTimeToUtc, utcToZonedTime, format } = require("date-fns-tz");
 const api = require("./api");
 const payloads = require("./payloads");
 
+const { filePaths } = require("./constants");
 const { writeData } = require("./utils/fileWrite");
 
 /*
@@ -57,7 +58,7 @@ const create = async (userId, view) => {
         ...zonedDate,
     };
 
-    writeData("database/data.json", data);
+    writeData(filePaths.standupConfig, data);
 
     const reminderTime = values.reminder_picker_block.reminder_time;
     const reminderTimeMinutes =
