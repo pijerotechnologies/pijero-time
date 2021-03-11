@@ -33,6 +33,7 @@ module.exports = {
       ]),
     };
   },
+
   standupQuestions: (context) => {
     return {
       trigger_id: context.trigger_id,
@@ -100,6 +101,21 @@ module.exports = {
           },
         ],
       }),
+    };
+  },
+  answersSummary: (context) => {
+    return {
+      channel: context.channel_id,
+      blocks: JSON.stringify([
+        {
+          type: "section",
+          text: {
+            type: "plain_text",
+            text: context.content,
+            emoji: true,
+          },
+        },
+      ]),
     };
   },
   standupQuestionsInit: (context) => {

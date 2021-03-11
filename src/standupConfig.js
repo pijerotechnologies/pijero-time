@@ -45,15 +45,14 @@ const sendConfirmation = async (userId) => {
   debug("sendConfirmation: %o", result);
 };
 
-const sendMessageToUsers = async (usersArray) => {
-  console.log(usersArray);
+const sendAnswers = async (usersArray, data) => {
   let channel = await api.callAPIMethod("conversations.open", {
     users: usersArray,
   });
 
-  let message = payloads.confirmation({
+  let message = payloads.answersSummary({
     channel_id: channel.channel.id,
-    title: `GET READY FOR THE SETUP`,
+    content: JSON.stringify(data.response),
   });
 
   let result = await api.callAPIMethod("chat.postMessage", message);
@@ -87,7 +86,6 @@ const handleUserInteraction = async (userId, view) => {
 
   switch (view.external_id) {
     case "standup_questions":
-      console.log("STANDUP QUESTIONS");
       data = {
         response: {
           user: userId,
@@ -96,6 +94,12 @@ const handleUserInteraction = async (userId, view) => {
           thirdAnswer: values.standup_question_three.answer.value,
         },
       };
+      const usersInChannel = await readData("database/data.json").then(
+        (data) => data.users_picker_block.users.selected_users
+      );
+
+      await sendAnswers(usersInChannel, data);
+
       await writeData("database/answers.json", data);
       break;
     default:
