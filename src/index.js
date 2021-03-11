@@ -17,54 +17,36 @@ const { readData } = require("./utils/fileWrite");
 const { formatConfiguredTime } = require("./utils/time");
 
 const cronLogic = () => {
-    readData(filePaths.standupConfig)
-        .then((data) => {
-            const timeZone = data.clientTimeZone;
-            const currentDate = new Date();
-            const currentWeekday = formatToTimeZone(currentDate, "dddd", {
-                timeZone,
-            });
-            const currentTime = formatToTimeZone(currentDate, "HH:mm", {
-                timeZone,
-            });
-            const daysPicker = data.days_picker_block.days_picker;
-            const reminderHour =
-                data.reminder_picker_block.reminder_time.selected_time;
-            const reminderMinutes =
-                data.reminder_minutes_block.reminder_time_minutes
-                    .selected_option.value;
-            const reminderTime = formatConfiguredTime(
-                reminderHour,
-                reminderMinutes
-            );
-            const standupHour =
-                data.standup_picker_block.standup_picker.selected_time;
-            const standupMinutes =
-                data.standup_minutes_picker_block.standup_minutes
-                    .selected_option.value;
-            const standupTime = formatConfiguredTime(
-                standupHour,
-                standupMinutes
-            );
+  readData(filePaths.standupConfig)
+    .then((data) => {
+      const timeZone = data.clientTimeZone;
+      const currentDate = new Date();
+      const currentWeekday = formatToTimeZone(currentDate, "dddd", {
+        timeZone,
+      });
+      const currentHour = formatToTimeZone(currentDate, "HH:mm", {
+        timeZone,
+      });
 
-            daysPicker.selected_options.map((option) => {
-                if (currentWeekday.toLocaleLowerCase() === option.value) {
-                    if (currentTime === reminderTime) {
-                        console.log("it's reminder time");
-                    }
-                    if (currentTime === standupTime) {
-                        console.log("it's standup time");
-                    }
-                }
-            });
-        })
-        .catch((error) => {
-            throw new Error("Error reading data: ", error);
-        });
+      const daysPicker = data.days_picker_block.days_picker;
+      const reminderHour =
+        data.reminder_picker_block.reminder_time.selected_time;
+      const reminderMinutes =
+        data.reminder_minutes_block.reminder_time_minutes.selected_option.value;
+
+      daysPicker.selected_options.map((option) => {
+        if (currentWeekday.toLocaleLowerCase() === option.value) {
+          formatConfiguredTime(reminderHour, reminderMinutes);
+        }
+      });
+    })
+    .catch((error) => {
+      throw new Error("Error reading data: ", error);
+    });
 };
 
 cron.schedule("* * * * *", () => {
-    cronLogic();
+  cronLogic();
 });
 
 /*
@@ -74,20 +56,20 @@ cron.schedule("* * * * *", () => {
  */
 
 const rawBodyBuffer = (req, res, buf, encoding) => {
-    if (buf && buf.length) {
-        req.rawBody = buf.toString(encoding || "utf8");
-    }
+  if (buf && buf.length) {
+    req.rawBody = buf.toString(encoding || "utf8");
+  }
 };
 
 app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
 app.use(bodyParser.json({ verify: rawBodyBuffer }));
 
 app.get("/", (req, res) => {
-    cronLogic();
-    res.send(
-        "<h2>The Slash Command and Dialog app is running</h2> <p>Follow the" +
-            " instructions in the README to configure the Slack App and your environment variables.</p>"
-    );
+  cronLogic();
+  res.send(
+    "<h2>The Slash Command and Dialog app is running</h2> <p>Follow the" +
+      " instructions in the README to configure the Slack App and your environment variables.</p>"
+  );
 });
 
 /*
@@ -95,47 +77,68 @@ app.get("/", (req, res) => {
  * Checks verification token and opens a dialog to capture more info.
  */
 app.post("/command", async (req, res) => {
-    // Verify the signing secret
-    if (!signature.isVerified(req)) {
-        debug("Verification token mismatch");
-        return res.status(404).send();
-    }
+  // Verify the signing secret
+  if (!signature.isVerified(req)) {
+    debug("Verification token mismatch");
+    return res.status(404).send();
+  }
 
-    // extract the slash command text, and trigger ID from payload
-    const { trigger_id } = req.body;
+  // extract the slash command text, and trigger ID from payload
+  const { trigger_id } = req.body;
 
-    // create the modal payload - includes the dialog structure, Slack API token,
-    // and trigger ID
-    let view = payloads.standupConfig({
-        trigger_id,
-    });
+  // create the modal payload - includes the dialog structure, Slack API token,
+  // and trigger ID
+  let view = payloads.standupConfig({
+    trigger_id,
+  });
 
-    let result = await api.callAPIMethod("views.open", view);
+  let result = await api.callAPIMethod("views.open", view);
 
-    debug("views.open: %o", result);
-    return res.send("");
+  debug("views.open: %o", result);
+  return res.send("");
 });
 
 /*
  * Endpoint to receive the dialog submission. Checks the verification token
  * and creates a Helpdesk standupconfig
  */
-app.post("/interactive", (req, res) => {
-    // Verify the signing secret
-    if (!signature.isVerified(req)) {
-        debug("Verification token mismatch");
-        return res.status(404).send();
-    }
-    const body = JSON.parse(req.body.payload);
+app.post("/interactive", async (req, res) => {
+  // Verify the signing secret
+  if (!signature.isVerified(req)) {
+    debug("Verification token mismatch");
+    return res.status(404).send();
+  }
 
-    res.send("");
-    standupconfig.create(body.user.id, body.view);
+  const body = JSON.parse(req.body.payload);
+
+  switch (body.type) {
+    case "block_actions":
+      let view = payloads.standupQuestions({
+        trigger_id: body.trigger_id,
+      });
+
+      let result = await api.callAPIMethod("views.open", view);
+
+      debug("views.open: %o", result);
+      return res.send("");
+      break;
+
+    // case "view_submission":
+    //   res.send("");
+    //   standupconfig.create(body.user.id, body.view);
+    //   break;
+
+    case "view_submission":
+      res.send("");
+      standupconfig.handleUserInteraction(body.user.id, body.view);
+      break;
+  }
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
-    console.log(
-        "Express server listening on port %d in %s mode",
-        server.address().port,
-        app.settings.env
-    );
+  console.log(
+    "Express server listening on port %d in %s mode",
+    server.address().port,
+    app.settings.env
+  );
 });
