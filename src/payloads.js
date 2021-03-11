@@ -38,6 +38,7 @@ module.exports = {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
         type: "modal",
+        external_id: "standup_questions",
         submit: {
           type: "plain_text",
           text: "Submit",
@@ -62,10 +63,11 @@ module.exports = {
             },
           },
           {
+            block_id: "standup_question_one",
             type: "input",
             element: {
               type: "plain_text_input",
-              action_id: "standup_question_one",
+              action_id: "answer",
             },
             label: {
               type: "plain_text",
@@ -73,10 +75,11 @@ module.exports = {
             },
           },
           {
+            block_id: "standup_question_two",
             type: "input",
             element: {
               type: "plain_text_input",
-              action_id: "standup_question_two",
+              action_id: "answer",
             },
             label: {
               type: "plain_text",
@@ -84,10 +87,11 @@ module.exports = {
             },
           },
           {
+            block_id: "standup_question_three",
             type: "input",
             element: {
               type: "plain_text_input",
-              action_id: "standup_question_three",
+              action_id: "answer",
             },
             label: {
               type: "plain_text",

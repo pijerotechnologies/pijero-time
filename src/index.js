@@ -91,9 +91,8 @@ app.post("/interactive", async (req, res) => {
     //   break;
 
     case "view_submission":
-      console.log(body.view.blocks);
       res.send("");
-      //   standupconfig.handleUserInteraction(body.user.id, body.view);
+      standupconfig.handleUserInteraction(body.user.id, body.view);
       break;
   }
 });

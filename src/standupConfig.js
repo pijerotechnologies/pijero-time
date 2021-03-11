@@ -15,7 +15,7 @@ async function readData(file) {
 
 const writeData = (file, data) => {
   const formattedData = JSON.stringify(data);
-  fs.writeFile("database/data.json", formattedData, callback);
+  fs.writeFile(file, formattedData, callback);
 
   function callback(err) {
     console.log(`err ${err}`);
@@ -80,27 +80,32 @@ const initStandupQuestions = async (usersArray) => {
 
 const handleUserInteraction = async (userId, view) => {
   let values = view.state.values;
-
   let userData = await api.callAPIMethod("users.info", {
     user: userId,
   });
+  let data = {};
 
-  console.log(values);
-  console.log(userData);
+  switch (view.external_id) {
+    case "standup_questions":
+      console.log("STANDUP QUESTIONS");
+      data = {
+        response: {
+          user: userId,
+          firstAnswer: values.standup_question_one.answer.value,
+          secondAnswer: values.standup_question_two.answer.value,
+          thirdAnswer: values.standup_question_three.answer.value,
+        },
+      };
+      await writeData("database/answers.json", data);
+      break;
+    default:
+      const selectedUsers = values.users_picker_block.users.selected_users;
+      await initStandupQuestions(selectedUsers);
+
+      await writeData("database/data.json", values);
+  }
+
+  console.log(data);
 };
-const create = async (userId, view) => {
-  let values = view.state.values;
 
-  let result = await api.callAPIMethod("users.info", {
-    user: userId,
-  });
-
-  // await sendConfirmation(userId);
-
-  const selectedUsers = values.users_picker_block.users.selected_users;
-  await initStandupQuestions(selectedUsers);
-
-  await writeData("database/data.json", values);
-};
-
-module.exports = { create, sendConfirmation };
+module.exports = { sendConfirmation, handleUserInteraction };
