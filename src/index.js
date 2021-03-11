@@ -125,16 +125,37 @@ app.post("/command", async (req, res) => {
  * Endpoint to receive the dialog submission. Checks the verification token
  * and creates a Helpdesk standupconfig
  */
-app.post("/interactive", (req, res) => {
+app.post("/interactive", async (req, res) => {
     // Verify the signing secret
     if (!signature.isVerified(req)) {
         debug("Verification token mismatch");
         return res.status(404).send();
     }
+
     const body = JSON.parse(req.body.payload);
 
-    res.send("");
-    standupconfig.create(body.user.id, body.view);
+    switch (body.type) {
+        case "block_actions":
+            let view = payloads.standupQuestions({
+                trigger_id: body.trigger_id,
+            });
+
+            let result = await api.callAPIMethod("views.open", view);
+
+            debug("views.open: %o", result);
+            return res.send("");
+            break;
+
+        // case "view_submission":
+        //   res.send("");
+        //   standupconfig.create(body.user.id, body.view);
+        //   break;
+
+        case "view_submission":
+            res.send("");
+            standupconfig.handleUserInteraction(body.user.id, body.view);
+            break;
+    }
 });
 
 const server = app.listen(process.env.PORT || 5000, () => {
