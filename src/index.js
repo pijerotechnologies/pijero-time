@@ -2,15 +2,52 @@ require("dotenv").config();
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const debug = require("debug")("slash-command-template:index");
+const app = express();
+
+const cron = require("node-cron");
+const { formatToTimeZone } = require("date-fns-timezone");
+
 const standupconfig = require("./standupConfig");
 const signature = require("./verifySignature");
 const api = require("./api");
 const payloads = require("./payloads");
-const debug = require("debug")("slash-command-template:index");
+const { filePaths } = require("./constants");
+const { readData } = require("./utils/fileWrite");
+const { formatConfiguredTime } = require("./utils/time");
 
-const app = express();
+const cronLogic = () => {
+  readData(filePaths.standupConfig)
+    .then((data) => {
+      const timeZone = data.clientTimeZone;
+      const currentDate = new Date();
+      const currentWeekday = formatToTimeZone(currentDate, "dddd", {
+        timeZone,
+      });
+      const currentHour = formatToTimeZone(currentDate, "HH:mm", {
+        timeZone,
+      });
 
-const cron = require("node-cron");
+      const daysPicker = data.days_picker_block.days_picker;
+      const reminderHour =
+        data.reminder_picker_block.reminder_time.selected_time;
+      const reminderMinutes =
+        data.reminder_minutes_block.reminder_time_minutes.selected_option.value;
+
+      daysPicker.selected_options.map((option) => {
+        if (currentWeekday.toLocaleLowerCase() === option.value) {
+          formatConfiguredTime(reminderHour, reminderMinutes);
+        }
+      });
+    })
+    .catch((error) => {
+      throw new Error("Error reading data: ", error);
+    });
+};
+
+cron.schedule("* * * * *", () => {
+  cronLogic();
+});
 
 /*
  * Parse application/x-www-form-urlencoded && application/json
@@ -28,6 +65,7 @@ app.use(bodyParser.urlencoded({ verify: rawBodyBuffer, extended: true }));
 app.use(bodyParser.json({ verify: rawBodyBuffer }));
 
 app.get("/", (req, res) => {
+  cronLogic();
   res.send(
     "<h2>The Slash Command and Dialog app is running</h2> <p>Follow the" +
       " instructions in the README to configure the Slack App and your environment variables.</p>"
@@ -103,8 +141,4 @@ const server = app.listen(process.env.PORT || 5000, () => {
     server.address().port,
     app.settings.env
   );
-});
-
-cron.schedule("* * * * *", () => {
-  console.log("running a task every minute");
 });

@@ -1,31 +1,10 @@
 const debug = require("debug")("slash-command-template:standupconfig");
-const { zonedTimeToUtc, utcToZonedTime, format } = require("date-fns-tz");
 
 const api = require("./api");
 const payloads = require("./payloads");
 
-const fs = require("fs");
-
-async function readData(file) {
-  const data = await fs.readFileSync(file);
-  const formattedData = JSON.parse(data);
-
-  return formattedData;
-}
-
-const writeData = (file, data) => {
-  const formattedData = JSON.stringify(data);
-  fs.writeFile(file, formattedData, callback);
-
-  function callback(err) {
-    console.log(`err ${err}`);
-  }
-};
-
-readData("database/data.json").then((data) => {
-  console.log("DATABASE DATA");
-  console.log(data);
-});
+const { filePaths } = require("./constants");
+const { writeData, readData } = require("./utils/fileWrite");
 
 /*
  *  Send standupconfig creation confirmation via
@@ -125,6 +104,48 @@ const handleUserInteraction = async (userId, view) => {
 
       await writeData("database/data.json", values);
   }
+};
+const create = async (userId, view) => {
+  const result = await api.callAPIMethod("users.info", {
+    user: userId,
+  });
+  const timeZone = result.user.tz;
+  const zonedDate = {
+    clientTime: new Date().toLocaleString("en-US", {
+      timeZone,
+    }),
+  };
+  const timeZoneObj = {
+    clientTimeZone: timeZone,
+  };
+  const values = view.state.values;
+  const data = {
+    ...values,
+    ...zonedDate,
+    ...timeZoneObj,
+  };
+
+  writeData(filePaths.standupConfig, data);
+
+  const reminderTime = values.reminder_picker_block.reminder_time;
+  const reminderTimeMinutes =
+    values.reminder_minutes_block.reminder_time_minutes;
+  const standupTime = values.standup_picker_block.standup_picker;
+  const standupTimeMinutes =
+    values.standup_minutes_picker_block.standup_minutes;
+  const daysPicker = values.days_picker_block.days_picker;
+  const usersPicker = values.users_picker_block.users;
+
+  // console.log({ reminderTime });
+  // console.log({ reminderTimeMinutes });
+  // console.log({ standupTime });
+  // console.log({ standupTimeMinutes });
+  // console.log({ daysPicker });
+  // console.log({ usersPicker });
+
+  await sendConfirmation({
+    userId,
+  });
 };
 
 module.exports = { sendConfirmation, handleUserInteraction };
