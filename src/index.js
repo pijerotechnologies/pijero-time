@@ -14,24 +14,30 @@ const api = require("./api");
 const payloads = require("./payloads");
 const { filePaths } = require("./constants");
 const { readData } = require("./utils/fileWrite");
+const { formatConfiguredTime } = require("./utils/time");
 
 const cronLogic = () => {
     readData(filePaths.standupConfig)
         .then((data) => {
             const timeZone = data.clientTimeZone;
-            const currentWeekday = formatToTimeZone(new Date(), "dddd", {
+            const currentDate = new Date();
+            const currentWeekday = formatToTimeZone(currentDate, "dddd", {
                 timeZone,
             });
-            const currentHour = formatToTimeZone(new Date(), "HH:mm", {
+            const currentHour = formatToTimeZone(currentDate, "HH:mm", {
                 timeZone,
             });
 
             const daysPicker = data.days_picker_block.days_picker;
+            const reminderHour =
+                data.reminder_picker_block.reminder_time.selected_time;
+            const reminderMinutes =
+                data.reminder_minutes_block.reminder_time_minutes
+                    .selected_option.value;
 
             daysPicker.selected_options.map((option) => {
                 if (currentWeekday.toLocaleLowerCase() === option.value) {
-                    console.log("optionas: ", option);
-                    console.log({ currentHour });
+                    formatConfiguredTime(reminderHour, reminderMinutes);
                 }
             });
         })
