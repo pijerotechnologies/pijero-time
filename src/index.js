@@ -18,9 +18,12 @@ const { readData } = require("./utils/fileWrite");
 const cronLogic = () => {
     readData(filePaths.standupConfig)
         .then((data) => {
-            const clientTimeZone = data.clientTimeZone;
+            const timeZone = data.clientTimeZone;
             const currentWeekday = formatToTimeZone(new Date(), "dddd", {
-                timeZone: clientTimeZone,
+                timeZone,
+            });
+            const currentHour = formatToTimeZone(new Date(), "HH:mm", {
+                timeZone,
             });
 
             const daysPicker = data.days_picker_block.days_picker;
@@ -28,6 +31,7 @@ const cronLogic = () => {
             daysPicker.selected_options.map((option) => {
                 if (currentWeekday.toLocaleLowerCase() === option.value) {
                     console.log("optionas: ", option);
+                    console.log({ currentHour });
                 }
             });
         })
