@@ -24,20 +24,37 @@ const cronLogic = () => {
             const currentWeekday = formatToTimeZone(currentDate, "dddd", {
                 timeZone,
             });
-            const currentHour = formatToTimeZone(currentDate, "HH:mm", {
+            const currentTime = formatToTimeZone(currentDate, "HH:mm", {
                 timeZone,
             });
-
             const daysPicker = data.days_picker_block.days_picker;
             const reminderHour =
                 data.reminder_picker_block.reminder_time.selected_time;
             const reminderMinutes =
                 data.reminder_minutes_block.reminder_time_minutes
                     .selected_option.value;
+            const reminderTime = formatConfiguredTime(
+                reminderHour,
+                reminderMinutes
+            );
+            const standupHour =
+                data.standup_picker_block.standup_picker.selected_time;
+            const standupMinutes =
+                data.standup_minutes_picker_block.standup_minutes
+                    .selected_option.value;
+            const standupTime = formatConfiguredTime(
+                standupHour,
+                standupMinutes
+            );
 
             daysPicker.selected_options.map((option) => {
                 if (currentWeekday.toLocaleLowerCase() === option.value) {
-                    formatConfiguredTime(reminderHour, reminderMinutes);
+                    if (currentTime === reminderTime) {
+                        console.log("it's reminder time");
+                    }
+                    if (currentTime === standupTime) {
+                        console.log("it's standup time");
+                    }
                 }
             });
         })
