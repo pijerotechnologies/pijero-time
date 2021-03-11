@@ -71,6 +71,7 @@ const initStandupQuestions = async (usersArray) => {
   });
 
   let result = await api.callAPIMethod("chat.postMessage", message);
+  console.log(result);
   debug("sendConfirmation: %o", result);
 };
 
@@ -108,8 +109,6 @@ const handleUserInteraction = async (userId, view) => {
 
       await writeData("database/data.json", values);
   }
-
-  console.log(data);
 };
 
 module.exports = { sendConfirmation, handleUserInteraction };
