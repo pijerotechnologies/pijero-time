@@ -25,6 +25,54 @@
                         "emoji": true
                     },
                     "value": "monday"
+                },
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Thursday",
+                        "emoji": true
+                    },
+                    "value": "thursday"
+                },
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Wednesday",
+                        "emoji": true
+                    },
+                    "value": "wednesday"
+                },
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Tuesday",
+                        "emoji": true
+                    },
+                    "value": "tuesday"
+                },
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Sunday",
+                        "emoji": true
+                    },
+                    "value": "sunday"
+                },
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Saturday",
+                        "emoji": true
+                    },
+                    "value": "saturday"
+                },
+                {
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Friday",
+                        "emoji": true
+                    },
+                    "value": "friday"
                 }
             ]
         }
@@ -32,9 +80,9 @@
     "users_picker_block": {
         "users": {
             "type": "multi_users_select",
-            "selected_users": ["U01QL2BDN8H"]
+            "selected_users": ["U01QL1MQL8H"]
         }
     },
-    "clientTime": "3/9/2021, 8:22:42 PM",
+    "clientTime": "3/11/2021, 7:57:18 PM",
     "clientTimeZone": "Europe/Athens"
 }

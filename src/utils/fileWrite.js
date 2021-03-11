@@ -9,7 +9,11 @@ async function readData(file) {
 
 const writeData = (filePath, data) => {
     const formattedData = JSON.stringify(data);
-    fs.writeFile(filePath, formattedData, null);
+    fs.writeFile(filePath, formattedData, callback);
+
+    function callback(error) {
+        console.log(error);
+    }
 };
 
 module.exports = { readData, writeData };

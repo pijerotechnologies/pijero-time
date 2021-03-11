@@ -6,6 +6,7 @@ const debug = require("debug")("slash-command-template:index");
 const app = express();
 
 const cron = require("node-cron");
+const { formatToTimeZone } = require("date-fns-timezone");
 
 const standupconfig = require("./standupConfig");
 const signature = require("./verifySignature");
@@ -17,12 +18,21 @@ const { readData } = require("./utils/fileWrite");
 const cronLogic = () => {
     readData(filePaths.standupConfig)
         .then((data) => {
-            const currentTime = new Date();
-            console.log({ data });
-            console.log({ currentTime });
+            const clientTimeZone = data.clientTimeZone;
+            const currentWeekday = formatToTimeZone(new Date(), "dddd", {
+                timeZone: clientTimeZone,
+            });
+
+            const daysPicker = data.days_picker_block.days_picker;
+
+            daysPicker.selected_options.map((option) => {
+                if (currentWeekday.toLocaleLowerCase() === option.value) {
+                    console.log("optionas: ", option);
+                }
+            });
         })
-        .catch(() => {
-            throw new Error("Error reading data");
+        .catch((error) => {
+            throw new Error("Error reading data: ", error);
         });
 };
 

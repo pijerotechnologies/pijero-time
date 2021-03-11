@@ -1,5 +1,4 @@
 const debug = require("debug")("slash-command-template:standupconfig");
-const { zonedTimeToUtc, utcToZonedTime, format } = require("date-fns-tz");
 
 const api = require("./api");
 const payloads = require("./payloads");
@@ -73,12 +72,12 @@ const create = async (userId, view) => {
     const daysPicker = values.days_picker_block.days_picker;
     const usersPicker = values.users_picker_block.users;
 
-    console.log({ reminderTime });
-    console.log({ reminderTimeMinutes });
-    console.log({ standupTime });
-    console.log({ standupTimeMinutes });
-    console.log({ daysPicker });
-    console.log({ usersPicker });
+    // console.log({ reminderTime });
+    // console.log({ reminderTimeMinutes });
+    // console.log({ standupTime });
+    // console.log({ standupTimeMinutes });
+    // console.log({ daysPicker });
+    // console.log({ usersPicker });
 
     await sendConfirmation({
         userId,
