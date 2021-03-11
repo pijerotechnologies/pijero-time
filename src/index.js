@@ -47,6 +47,11 @@ const cronLogic = () => {
                 standupMinutes
             );
 
+            //todo(rutenis): handle non configured minutes (null value)
+
+            console.log({ standupHour });
+            console.log({ standupMinutes });
+
             daysPicker.selected_options.map((option) => {
                 if (currentWeekday.toLocaleLowerCase() === option.value) {
                     if (currentTime === reminderTime) {
