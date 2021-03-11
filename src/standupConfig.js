@@ -46,6 +46,7 @@ const sendConfirmation = async (userId) => {
 };
 
 const sendAnswers = async (usersArray, data) => {
+  console.log(data);
   let channel = await api.callAPIMethod("conversations.open", {
     users: usersArray,
   });
@@ -99,9 +100,24 @@ const handleUserInteraction = async (userId, view) => {
         (data) => data.users_picker_block.users.selected_users
       );
 
-      await sendAnswers(usersInChannel, data);
+      // const formatData = JSON.stringify(data);
 
+      // await fs.appendFile("database/answers.json", formatData, callback);
+
+      // function callback(err) {
+      //   console.log(`err ${err}`);
+      // }
+
+      let currentAnswers = await readData("database/answers.json").then(
+        (data) => data
+      );
+
+      console.log("CURRENT DATA");
+      console.log(currentAnswers);
+
+      await sendAnswers(usersInChannel, data);
       await writeData("database/answers.json", data);
+
       break;
     default:
       const selectedUsers = values.users_picker_block.users.selected_users;
