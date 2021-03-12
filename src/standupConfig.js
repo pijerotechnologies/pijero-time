@@ -25,7 +25,7 @@ const sendConfirmation = async (userId) => {
 }
 
 const sendAnswers = async (usersArray, data) => {
-  console.log(data)
+  console.log({ data })
   let channel = await api.callAPIMethod('conversations.open', {
     users: usersArray,
   })
@@ -40,18 +40,17 @@ const sendAnswers = async (usersArray, data) => {
 }
 
 const initStandupQuestions = async (usersArray) => {
-  console.log(usersArray)
   let channel = await api.callAPIMethod('conversations.open', {
     users: usersArray,
   })
 
   let message = payloads.standupQuestionsInit({
     channel_id: channel.channel.id,
-    title: `PARE YOU READY TO ANSWER QUESTIONS?`,
+    title: `Reminder to answer the standup questions`,
   })
 
   let result = await api.callAPIMethod('chat.postMessage', message)
-  console.log(result)
+
   debug('sendConfirmation: %o', result)
 }
 
@@ -60,11 +59,7 @@ const initStandupQuestions = async (usersArray) => {
 
 const handleUserInteraction = async (userId, view) => {
   let values = view.state.values
-  let userData = await api.callAPIMethod('users.info', {
-    user: userId,
-  })
   let data = {}
-
   switch (view.external_id) {
     case 'standup_questions':
       data = {
@@ -78,30 +73,22 @@ const handleUserInteraction = async (userId, view) => {
       const usersInChannel = await readData('database/data.json').then(
         (data) => data.users_picker_block.users.selected_users,
       )
-
       // const formatData = JSON.stringify(data);
-
       // await fs.appendFile("database/answers.json", formatData, callback);
-
       // function callback(err) {
       //   console.log(`err ${err}`);
       // }
-
       let currentAnswers = await readData('database/answers.json').then(
         (data) => data,
       )
-
       console.log('CURRENT DATA')
       console.log(currentAnswers)
-
       await sendAnswers(usersInChannel, data)
       await writeData('database/answers.json', data)
-
       break
     default:
       const selectedUsers = values.users_picker_block.users.selected_users
       await initStandupQuestions(selectedUsers)
-
       await writeData('database/data.json', values)
   }
 }
@@ -127,4 +114,9 @@ const create = async (userId, view) => {
   })
 }
 
-module.exports = { sendConfirmation, handleUserInteraction, create }
+module.exports = {
+  sendConfirmation,
+  handleUserInteraction,
+  create,
+  initStandupQuestions,
+}

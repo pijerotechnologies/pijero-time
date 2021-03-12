@@ -4,7 +4,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const debug = require('debug')('slash-command-template:index')
 const app = express()
-
 const cron = require('node-cron')
 const { formatToTimeZone } = require('date-fns-timezone')
 
@@ -12,6 +11,7 @@ const standupconfig = require('./standupConfig')
 const signature = require('./verifySignature')
 const api = require('./api')
 const payloads = require('./payloads')
+const { initStandupQuestions } = require('./standupConfig')
 const { filePaths } = require('./constants')
 const { readData } = require('./utils/fileWrite')
 const { formatConfiguredTime } = require('./utils/time')
@@ -46,12 +46,15 @@ const cronLogic = () => {
               .value
       const standupTime = formatConfiguredTime(standupHour, standupMinutes)
 
+      initStandupQuestions(data.users_picker_block.users.selected_users)
+
       daysPicker.selected_options.map((option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
           if (currentTime === reminderTime) {
-            console.log("it's reminder time")
+            initStandupQuestions(data.users_picker_block.users.selected_users)
           }
           if (currentTime === standupTime) {
+            // todo: this should take into account that we want users to get summaries BEFORE the actual standup time
             console.log("it's standup time")
           }
         }
@@ -141,7 +144,7 @@ app.post('/interactive', async (req, res) => {
 
     case 'view_submission':
       res.send('')
-      standupconfig.handleUserInteraction(body.user.id, body.view)
+
       standupconfig.create(body.user.id, body.view)
       break
   }

@@ -38,7 +38,7 @@ module.exports = {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
         type: 'modal',
-        external_id: 'standup_questions',
+        external_id: 'standup_questions_modal',
         submit: {
           type: 'plain_text',
           text: 'Submit',
@@ -63,10 +63,11 @@ module.exports = {
             },
           },
           {
-            block_id: 'standup_question_one',
+            block_id: 'what_did_you_do_yesterday',
             type: 'input',
             element: {
               type: 'plain_text_input',
+              multiline: true,
               action_id: 'answer',
             },
             label: {
@@ -75,10 +76,11 @@ module.exports = {
             },
           },
           {
-            block_id: 'standup_question_two',
+            block_id: 'what_will_you_do_today',
             type: 'input',
             element: {
               type: 'plain_text_input',
+              multiline: true,
               action_id: 'answer',
             },
             label: {
@@ -87,10 +89,11 @@ module.exports = {
             },
           },
           {
-            block_id: 'standup_question_three',
+            block_id: 'do_you_have_any_blockers',
             type: 'input',
             element: {
               type: 'plain_text_input',
+              multiline: true,
               action_id: 'answer',
             },
             label: {
@@ -122,17 +125,25 @@ module.exports = {
       channel: context.channel_id,
       blocks: JSON.stringify([
         {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text:
+              'Get your team up to speed by answering a few standup questions',
+          },
+        },
+        {
           type: 'actions',
           elements: [
             {
               type: 'button',
               text: {
                 type: 'plain_text',
-                text: 'Answer Questions',
                 emoji: true,
+                text: 'Start',
               },
-              value: 'click_me_123',
-              action_id: 'start_questions',
+              style: 'primary',
+              value: 'standup_questions',
             },
           ],
         },
