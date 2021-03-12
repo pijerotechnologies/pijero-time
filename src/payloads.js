@@ -155,6 +155,7 @@ module.exports = {
     return {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
+        external_id: 'standup_config',
         type: 'modal',
         submit: {
           type: 'plain_text',
