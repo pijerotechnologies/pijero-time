@@ -123,6 +123,7 @@ module.exports = {
   standupQuestionsInit: (context) => {
     return {
       channel: context.channel_id,
+
       blocks: JSON.stringify([
         {
           type: 'section',

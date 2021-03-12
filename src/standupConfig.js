@@ -40,16 +40,14 @@ const sendAnswers = async (usersArray, data) => {
 }
 
 const initStandupQuestions = async (usersArray) => {
-  let channel = await api.callAPIMethod('conversations.open', {
-    users: usersArray,
-  })
+  usersArray.forEach(async (element) => {
+    let message = payloads.standupQuestionsInit({
+      channel_id: element,
+      title: `Reminder to answer the standup questions`,
+    })
 
-  let message = payloads.standupQuestionsInit({
-    channel_id: channel.channel.id,
-    title: `Reminder to answer the standup questions`,
+    let result = await api.callAPIMethod('chat.postMessage', message)
   })
-
-  let result = await api.callAPIMethod('chat.postMessage', message)
 
   debug('sendConfirmation: %o', result)
 }

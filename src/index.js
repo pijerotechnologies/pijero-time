@@ -48,9 +48,9 @@ const cronLogic = () => {
 
       daysPicker.selected_options.map((option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
-          if (currentTime === reminderTime) {
-            initStandupQuestions(data.users_picker_block.users.selected_users)
-          }
+          // if (currentTime === reminderTime) {
+          initStandupQuestions(data.users_picker_block.users.selected_users)
+          // }
           if (currentTime === standupTime) {
             // todo: this should take into account that we want users to get summaries BEFORE the actual standup time
             console.log("it's standup time")
@@ -128,6 +128,8 @@ app.post('/interactive', async (req, res) => {
   }
 
   const body = JSON.parse(req.body.payload)
+
+  console.log(body)
 
   switch (body.type) {
     case 'block_actions':
