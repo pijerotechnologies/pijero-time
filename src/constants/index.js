@@ -1,3 +1,3 @@
-const filePaths = { standupConfig: "database/data.json" };
+const filePaths = { standupConfig: 'database/data.json' }
 
-module.exports = { filePaths };
+module.exports = { filePaths }

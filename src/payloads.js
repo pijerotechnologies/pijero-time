@@ -2,417 +2,417 @@ module.exports = {
   confirmation: (context) => {
     return {
       channel: context.channel_id,
-      text: "Helpdesk ticket created!",
+      text: 'Helpdesk ticket created!',
       blocks: JSON.stringify([
         {
-          type: "section",
+          type: 'section',
           text: {
-            type: "mrkdwn",
-            text: "*Helpdesk ticket created!*",
+            type: 'mrkdwn',
+            text: '*Helpdesk ticket created!*',
           },
         },
         {
-          type: "divider",
+          type: 'divider',
         },
         {
-          type: "section",
+          type: 'section',
           text: {
-            type: "mrkdwn",
+            type: 'mrkdwn',
             text: `*Title*\n${context.title}\n\n*Description*\n${context.description}`,
           },
         },
         {
-          type: "context",
+          type: 'context',
           elements: [
             {
-              type: "mrkdwn",
+              type: 'mrkdwn',
               text: `*Urgency*: ${context.urgency}`,
             },
           ],
         },
       ]),
-    };
+    }
   },
 
   standupQuestions: (context) => {
     return {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
-        type: "modal",
-        external_id: "standup_questions",
+        type: 'modal',
+        external_id: 'standup_questions',
         submit: {
-          type: "plain_text",
-          text: "Submit",
+          type: 'plain_text',
+          text: 'Submit',
           emoji: true,
         },
         close: {
-          type: "plain_text",
-          text: "Cancel",
+          type: 'plain_text',
+          text: 'Cancel',
           emoji: true,
         },
         title: {
-          type: "plain_text",
-          text: "Stand-up Questions",
+          type: 'plain_text',
+          text: 'Stand-up Questions',
           emoji: true,
         },
         blocks: [
           {
-            type: "section",
+            type: 'section',
             text: {
-              type: "mrkdwn",
-              text: "Please answer these questions",
+              type: 'mrkdwn',
+              text: 'Please answer these questions',
             },
           },
           {
-            block_id: "standup_question_one",
-            type: "input",
+            block_id: 'standup_question_one',
+            type: 'input',
             element: {
-              type: "plain_text_input",
-              action_id: "answer",
+              type: 'plain_text_input',
+              action_id: 'answer',
             },
             label: {
-              type: "plain_text",
-              text: "What did you do yesterday?",
+              type: 'plain_text',
+              text: 'What did you do yesterday?',
             },
           },
           {
-            block_id: "standup_question_two",
-            type: "input",
+            block_id: 'standup_question_two',
+            type: 'input',
             element: {
-              type: "plain_text_input",
-              action_id: "answer",
+              type: 'plain_text_input',
+              action_id: 'answer',
             },
             label: {
-              type: "plain_text",
-              text: "What will you do today?",
+              type: 'plain_text',
+              text: 'What will you do today?',
             },
           },
           {
-            block_id: "standup_question_three",
-            type: "input",
+            block_id: 'standup_question_three',
+            type: 'input',
             element: {
-              type: "plain_text_input",
-              action_id: "answer",
+              type: 'plain_text_input',
+              action_id: 'answer',
             },
             label: {
-              type: "plain_text",
-              text: "Do you have any blockers?",
+              type: 'plain_text',
+              text: 'Do you have any blockers?',
             },
           },
         ],
       }),
-    };
+    }
   },
   answersSummary: (context) => {
     return {
       channel: context.channel_id,
       blocks: JSON.stringify([
         {
-          type: "section",
+          type: 'section',
           text: {
-            type: "plain_text",
+            type: 'plain_text',
             text: context.content,
             emoji: true,
           },
         },
       ]),
-    };
+    }
   },
   standupQuestionsInit: (context) => {
     return {
       channel: context.channel_id,
       blocks: JSON.stringify([
         {
-          type: "actions",
+          type: 'actions',
           elements: [
             {
-              type: "button",
+              type: 'button',
               text: {
-                type: "plain_text",
-                text: "Answer Questions",
+                type: 'plain_text',
+                text: 'Answer Questions',
                 emoji: true,
               },
-              value: "click_me_123",
-              action_id: "start_questions",
+              value: 'click_me_123',
+              action_id: 'start_questions',
             },
           ],
         },
       ]),
-    };
+    }
   },
 
   standupConfig: (context) => {
     return {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
-        type: "modal",
+        type: 'modal',
         submit: {
-          type: "plain_text",
-          text: "Submit",
+          type: 'plain_text',
+          text: 'Submit',
           emoji: true,
         },
         close: {
-          type: "plain_text",
-          text: "Cancel",
+          type: 'plain_text',
+          text: 'Cancel',
           emoji: true,
         },
         title: {
-          type: "plain_text",
-          text: "Pijero Time",
+          type: 'plain_text',
+          text: 'Pijero Time',
           emoji: true,
         },
         blocks: [
           {
-            type: "header",
+            type: 'header',
             text: {
-              type: "plain_text",
-              text: "Configure your stands",
+              type: 'plain_text',
+              text: 'Configure your stands',
               emoji: true,
             },
           },
           {
-            type: "divider",
+            type: 'divider',
           },
           {
-            block_id: "reminder_picker_block",
-            type: "input",
+            block_id: 'reminder_picker_block',
+            type: 'input',
             element: {
-              type: "timepicker",
-              initial_time: "09:00",
+              type: 'timepicker',
+              initial_time: '09:00',
               placeholder: {
-                type: "plain_text",
-                text: "Select time",
+                type: 'plain_text',
+                text: 'Select time',
                 emoji: true,
               },
-              action_id: "reminder_time",
+              action_id: 'reminder_time',
             },
             label: {
-              type: "plain_text",
-              text: "Reminder time",
+              type: 'plain_text',
+              text: 'Reminder time',
               emoji: true,
             },
           },
           {
-            type: "divider",
+            type: 'divider',
           },
           {
-            block_id: "reminder_minutes_block",
-            type: "section",
+            block_id: 'reminder_minutes_block',
+            type: 'section',
             text: {
-              type: "mrkdwn",
-              text: "Reminder minutes",
+              type: 'mrkdwn',
+              text: 'Reminder minutes',
             },
             accessory: {
-              type: "static_select",
+              type: 'static_select',
               placeholder: {
-                type: "plain_text",
-                text: "Select an item",
+                type: 'plain_text',
+                text: 'Select an item',
                 emoji: true,
               },
               options: [
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:00",
+                    type: 'plain_text',
+                    text: '00:00',
                     emoji: true,
                   },
-                  value: "0",
+                  value: '0',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:15",
+                    type: 'plain_text',
+                    text: '00:15',
                     emoji: true,
                   },
-                  value: "15",
+                  value: '15',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:30",
+                    type: 'plain_text',
+                    text: '00:30',
                     emoji: true,
                   },
-                  value: "30",
+                  value: '30',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:45",
+                    type: 'plain_text',
+                    text: '00:45',
                     emoji: true,
                   },
-                  value: "45",
+                  value: '45',
                 },
               ],
-              action_id: "reminder_time_minutes",
+              action_id: 'reminder_time_minutes',
             },
           },
           {
-            block_id: "standup_picker_block",
-            type: "input",
+            block_id: 'standup_picker_block',
+            type: 'input',
             element: {
-              type: "timepicker",
-              initial_time: "09:00",
+              type: 'timepicker',
+              initial_time: '09:00',
               placeholder: {
-                type: "plain_text",
-                text: "Select time",
+                type: 'plain_text',
+                text: 'Select time',
                 emoji: true,
               },
-              action_id: "standup_picker",
+              action_id: 'standup_picker',
             },
             label: {
-              type: "plain_text",
-              text: "Standup time",
+              type: 'plain_text',
+              text: 'Standup time',
               emoji: true,
             },
           },
           {
-            block_id: "standup_minutes_picker_block",
-            type: "section",
+            block_id: 'standup_minutes_picker_block',
+            type: 'section',
             text: {
-              type: "mrkdwn",
-              text: "Standup minutes",
+              type: 'mrkdwn',
+              text: 'Standup minutes',
             },
             accessory: {
-              type: "static_select",
+              type: 'static_select',
               placeholder: {
-                type: "plain_text",
-                text: "Select an item",
+                type: 'plain_text',
+                text: 'Select an item',
                 emoji: true,
               },
               options: [
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:00",
+                    type: 'plain_text',
+                    text: '00:00',
                     emoji: true,
                   },
-                  value: "0",
+                  value: '0',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:15",
+                    type: 'plain_text',
+                    text: '00:15',
                     emoji: true,
                   },
-                  value: "15",
+                  value: '15',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:30",
+                    type: 'plain_text',
+                    text: '00:30',
                     emoji: true,
                   },
-                  value: "30",
+                  value: '30',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "00:45",
+                    type: 'plain_text',
+                    text: '00:45',
                     emoji: true,
                   },
-                  value: "45",
+                  value: '45',
                 },
               ],
-              action_id: "standup_minutes",
+              action_id: 'standup_minutes',
             },
           },
           {
-            type: "divider",
+            type: 'divider',
           },
           {
-            block_id: "days_picker_block",
-            type: "input",
+            block_id: 'days_picker_block',
+            type: 'input',
             element: {
-              type: "checkboxes",
+              type: 'checkboxes',
               options: [
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Monday",
+                    type: 'plain_text',
+                    text: 'Monday',
                     emoji: true,
                   },
-                  value: "monday",
+                  value: 'monday',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Tuesday",
+                    type: 'plain_text',
+                    text: 'Tuesday',
                     emoji: true,
                   },
-                  value: "tuesday",
+                  value: 'tuesday',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Wednesday",
+                    type: 'plain_text',
+                    text: 'Wednesday',
                     emoji: true,
                   },
-                  value: "wednesday",
+                  value: 'wednesday',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Thursday",
+                    type: 'plain_text',
+                    text: 'Thursday',
                     emoji: true,
                   },
-                  value: "thursday",
+                  value: 'thursday',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Friday",
+                    type: 'plain_text',
+                    text: 'Friday',
                     emoji: true,
                   },
-                  value: "friday",
+                  value: 'friday',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Saturday",
+                    type: 'plain_text',
+                    text: 'Saturday',
                     emoji: true,
                   },
-                  value: "saturday",
+                  value: 'saturday',
                 },
                 {
                   text: {
-                    type: "plain_text",
-                    text: "Sunday",
+                    type: 'plain_text',
+                    text: 'Sunday',
                     emoji: true,
                   },
-                  value: "sunday",
+                  value: 'sunday',
                 },
               ],
-              action_id: "days_picker",
+              action_id: 'days_picker',
             },
             label: {
-              type: "plain_text",
-              text: "Active days",
+              type: 'plain_text',
+              text: 'Active days',
               emoji: true,
             },
           },
           {
-            type: "divider",
+            type: 'divider',
           },
           {
-            block_id: "users_picker_block",
-            type: "input",
+            block_id: 'users_picker_block',
+            type: 'input',
             element: {
-              type: "multi_users_select",
+              type: 'multi_users_select',
               placeholder: {
-                type: "plain_text",
-                text: "Select users",
+                type: 'plain_text',
+                text: 'Select users',
                 emoji: true,
               },
-              action_id: "users",
+              action_id: 'users',
             },
             label: {
-              type: "plain_text",
-              text: "Team members",
+              type: 'plain_text',
+              text: 'Team members',
               emoji: true,
             },
           },
         ],
       }),
-    };
+    }
   },
-};
+}

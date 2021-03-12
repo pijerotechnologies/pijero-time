@@ -1,263 +1,263 @@
 {
-    "type": "modal",
-    "submit": {
+  "type": "modal",
+  "submit": {
+    "type": "plain_text",
+    "text": "Submit",
+    "emoji": true
+  },
+  "close": {
+    "type": "plain_text",
+    "text": "Cancel",
+    "emoji": true
+  },
+  "title": {
+    "type": "plain_text",
+    "text": "Pijero Time",
+    "emoji": true
+  },
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
         "type": "plain_text",
-        "text": "Submit",
+        "text": "Configure your stands",
         "emoji": true
+      }
     },
-    "close": {
+    {
+      "type": "divider"
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "timepicker",
+        "initial_time": "13:37",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select time",
+          "emoji": true
+        },
+        "action_id": "reminder_time"
+      },
+      "label": {
         "type": "plain_text",
-        "text": "Cancel",
+        "text": "Reminder time",
         "emoji": true
+      }
     },
-    "title": {
+    {
+      "type": "divider"
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Reminder minutes"
+      },
+      "accessory": {
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select an item",
+          "emoji": true
+        },
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "00:00",
+              "emoji": true
+            },
+            "value": "0"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "00:15",
+              "emoji": true
+            },
+            "value": "15"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "00:30",
+              "emoji": true
+            },
+            "value": "30"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "00:45",
+              "emoji": true
+            },
+            "value": "45"
+          }
+        ],
+        "action_id": "reminder_time_minutes"
+      }
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "timepicker",
+        "initial_time": "13:37",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select time",
+          "emoji": true
+        },
+        "action_id": "timepicker-action"
+      },
+      "label": {
         "type": "plain_text",
-        "text": "Pijero Time",
+        "text": "Standup time",
         "emoji": true
+      }
     },
-    "blocks": [
-        {
-            "type": "header",
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": "Standup minutes"
+      },
+      "accessory": {
+        "type": "static_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select an item",
+          "emoji": true
+        },
+        "options": [
+          {
             "text": {
-                "type": "plain_text",
-                "text": "Configure your stands",
-                "emoji": true
-            }
-        },
-        {
-            "type": "divider"
-        },
-        {
-            "type": "input",
-            "element": {
-                "type": "timepicker",
-                "initial_time": "13:37",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select time",
-                    "emoji": true
-                },
-                "action_id": "reminder_time"
+              "type": "plain_text",
+              "text": "00:00",
+              "emoji": true
             },
-            "label": {
-                "type": "plain_text",
-                "text": "Reminder time",
-                "emoji": true
-            }
-        },
-        {
-            "type": "divider"
-        },
-        {
-            "type": "section",
+            "value": "0"
+          },
+          {
             "text": {
-                "type": "mrkdwn",
-                "text": "Reminder minutes"
+              "type": "plain_text",
+              "text": "00:15",
+              "emoji": true
             },
-            "accessory": {
-                "type": "static_select",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select an item",
-                    "emoji": true
-                },
-                "options": [
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:00",
-                            "emoji": true
-                        },
-                        "value": "0"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:15",
-                            "emoji": true
-                        },
-                        "value": "15"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:30",
-                            "emoji": true
-                        },
-                        "value": "30"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:45",
-                            "emoji": true
-                        },
-                        "value": "45"
-                    }
-                ],
-                "action_id": "reminder_time_minutes"
-            }
-        },
-        {
-            "type": "input",
-            "element": {
-                "type": "timepicker",
-                "initial_time": "13:37",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select time",
-                    "emoji": true
-                },
-                "action_id": "timepicker-action"
-            },
-            "label": {
-                "type": "plain_text",
-                "text": "Standup time",
-                "emoji": true
-            }
-        },
-        {
-            "type": "section",
+            "value": "15"
+          },
+          {
             "text": {
-                "type": "mrkdwn",
-                "text": "Standup minutes"
+              "type": "plain_text",
+              "text": "00:30",
+              "emoji": true
             },
-            "accessory": {
-                "type": "static_select",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select an item",
-                    "emoji": true
-                },
-                "options": [
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:00",
-                            "emoji": true
-                        },
-                        "value": "0"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:15",
-                            "emoji": true
-                        },
-                        "value": "15"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:30",
-                            "emoji": true
-                        },
-                        "value": "30"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "00:45",
-                            "emoji": true
-                        },
-                        "value": "45"
-                    }
-                ],
-                "action_id": "reminder_time_minutes"
-            }
-        },
-        {
-            "type": "divider"
-        },
-        {
-            "type": "input",
-            "element": {
-                "type": "checkboxes",
-                "options": [
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Monday",
-                            "emoji": true
-                        },
-                        "value": "monday"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Tuesday",
-                            "emoji": true
-                        },
-                        "value": "tuesday"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Wednesday",
-                            "emoji": true
-                        },
-                        "value": "wednesday"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Thursday",
-                            "emoji": true
-                        },
-                        "value": "thursday"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Friday",
-                            "emoji": true
-                        },
-                        "value": "friday"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Saturday",
-                            "emoji": true
-                        },
-                        "value": "saturday"
-                    },
-                    {
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Sunday",
-                            "emoji": true
-                        },
-                        "value": "sunday"
-                    }
-                ],
-                "action_id": "checkboxes-action"
+            "value": "30"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "00:45",
+              "emoji": true
             },
-            "label": {
-                "type": "plain_text",
-                "text": "Active days",
-                "emoji": true
-            }
-        },
-        {
-            "type": "divider"
-        },
-        {
-            "type": "input",
-            "element": {
-                "type": "multi_users_select",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select users",
-                    "emoji": true
-                },
-                "action_id": "team_members"
+            "value": "45"
+          }
+        ],
+        "action_id": "reminder_time_minutes"
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "checkboxes",
+        "options": [
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Monday",
+              "emoji": true
             },
-            "label": {
-                "type": "plain_text",
-                "text": "Team members",
-                "emoji": true
-            }
-        }
-    ]
+            "value": "monday"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Tuesday",
+              "emoji": true
+            },
+            "value": "tuesday"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Wednesday",
+              "emoji": true
+            },
+            "value": "wednesday"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Thursday",
+              "emoji": true
+            },
+            "value": "thursday"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Friday",
+              "emoji": true
+            },
+            "value": "friday"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Saturday",
+              "emoji": true
+            },
+            "value": "saturday"
+          },
+          {
+            "text": {
+              "type": "plain_text",
+              "text": "Sunday",
+              "emoji": true
+            },
+            "value": "sunday"
+          }
+        ],
+        "action_id": "checkboxes-action"
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Active days",
+        "emoji": true
+      }
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "input",
+      "element": {
+        "type": "multi_users_select",
+        "placeholder": {
+          "type": "plain_text",
+          "text": "Select users",
+          "emoji": true
+        },
+        "action_id": "team_members"
+      },
+      "label": {
+        "type": "plain_text",
+        "text": "Team members",
+        "emoji": true
+      }
+    }
+  ]
 }
