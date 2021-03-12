@@ -58,14 +58,15 @@ const initStandupQuestions = async (usersArray) => {
 const handleUserInteraction = async (userId, view) => {
   let values = view.state.values
   let data = {}
+
   switch (view.external_id) {
-    case 'standup_questions':
+    case 'standup_questions_modal':
       data = {
         response: {
           user: userId,
-          firstAnswer: values.standup_question_one.answer.value,
-          secondAnswer: values.standup_question_two.answer.value,
-          thirdAnswer: values.standup_question_three.answer.value,
+          firstAnswer: values.what_did_you_do_yesterday.answer.value,
+          secondAnswer: values.what_will_you_do_today.answer.value,
+          thirdAnswer: values.do_you_have_any_blockers.answer.value,
         },
       }
       const usersInChannel = await readData('database/data.json').then(

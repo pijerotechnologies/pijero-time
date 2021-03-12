@@ -143,9 +143,17 @@ app.post('/interactive', async (req, res) => {
       return res.send('')
 
     case 'view_submission':
-      res.send('')
+      switch (body.view.external_id) {
+        case 'standup_config':
+          res.send('')
+          standupconfig.create(body.user.id, body.view)
+          break
+        case 'standup_questions_modal':
+          res.send('')
+          standupconfig.handleUserInteraction(body.user.id, body.view)
+          break
+      }
 
-      standupconfig.create(body.user.id, body.view)
       break
   }
 })
