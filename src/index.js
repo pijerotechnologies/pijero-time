@@ -46,8 +46,6 @@ const cronLogic = () => {
               .value
       const standupTime = formatConfiguredTime(standupHour, standupMinutes)
 
-      initStandupQuestions(data.users_picker_block.users.selected_users)
-
       daysPicker.selected_options.map((option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
           if (currentTime === reminderTime) {
