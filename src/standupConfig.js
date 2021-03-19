@@ -47,9 +47,12 @@ const initStandupQuestions = async (usersArray) => {
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
+    debug('sendConfirmation: %o', result)
+    // return res.send('')
   })
 
-  debug('sendConfirmation: %o', result)
+ 
+
 }
 
 // Create helpdesk standupconfig. Call users.find to get the user's email address
@@ -59,7 +62,7 @@ const handleUserInteraction = async (userId, view) => {
   let values = view.state.values
   let data = {}
 
-  switch (view.external_id) {
+  switch (view.callback_id) {
     case 'standup_questions_modal':
       data = {
         response: {

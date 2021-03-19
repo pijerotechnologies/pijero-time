@@ -38,7 +38,7 @@ module.exports = {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
         type: 'modal',
-        external_id: 'standup_questions_modal',
+        callback_id: 'standup_questions_modal',
         submit: {
           type: 'plain_text',
           text: 'Submit',
@@ -155,7 +155,7 @@ module.exports = {
     return {
       trigger_id: context.trigger_id,
       view: JSON.stringify({
-        external_id: 'standup_config',
+        callback_id: 'standup_config',
         type: 'modal',
         submit: {
           type: 'plain_text',

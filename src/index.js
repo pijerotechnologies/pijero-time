@@ -139,11 +139,14 @@ app.post('/interactive', async (req, res) => {
 
       let result = await api.callAPIMethod('views.open', view)
 
+    
+      console.log(result)
+
       debug('views.open: %o', result)
       return res.send('')
 
     case 'view_submission':
-      switch (body.view.external_id) {
+      switch (body.view.callback_id) {
         case 'standup_config':
           res.send('')
           standupconfig.create(body.user.id, body.view)
