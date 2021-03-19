@@ -129,8 +129,7 @@ app.post('/interactive', async (req, res) => {
 
   const body = JSON.parse(req.body.payload)
 
-  console.log(body)
-
+  
   switch (body.type) {
     case 'block_actions':
       let view = payloads.standupQuestions({
@@ -139,8 +138,6 @@ app.post('/interactive', async (req, res) => {
 
       let result = await api.callAPIMethod('views.open', view)
 
-    
-      console.log(result)
 
       debug('views.open: %o', result)
       return res.send('')
