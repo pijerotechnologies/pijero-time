@@ -27,7 +27,7 @@ const sendConfirmation = async (userId) => {
 
 const sendAnswers = async (usersArray, data) => {
   const text = JSON.stringify(data)
-  console.log(data)
+
   // const {user, firstAnswer, secondAnswer, thirdAnswer} = text
 
   usersArray.forEach(async (element) => {
@@ -65,19 +65,17 @@ const handleUserInteraction = async (userId, view) => {
 
   switch (view.callback_id) {
     case 'standup_questions_modal':
-      // data = `USER: ${userId} 1: ${values.what_did_you_do_yesterday.answer.value} 2: ${values.what_will_you_do_today.answer.value} 3: ${values.do_you_have_any_blockers.answer.value}`
       data = {
         userId,
-        1: values.what_did_you_do_yesterday.answer.value,
-        2: values.what_will_you_do_today.answer.value,
-        3: values.do_you_have_any_blockers.answer.value,
+        first: values.what_did_you_do_yesterday.answer.value,
+        second: values.what_will_you_do_today.answer.value,
+        third: values.do_you_have_any_blockers.answer.value,
       }
 
       const usersInChannel = await readData('database/data.json').then(
         (data) => data.users_picker_block.users.selected_users,
       )
 
-      // const formatData = JSON.stringify(data);
       await appendData('database/answers.json', data)
 
       let currentAnswers = await readData('database/answers.json')
@@ -86,7 +84,9 @@ const handleUserInteraction = async (userId, view) => {
           throw new Error('Error reading data: ', error)
         })
 
-      await sendAnswers(usersInChannel, currentAnswers)
+      console.log(currentAnswers)
+
+      await sendAnswers(usersInChannel, currentAnswers.answers)
 
       break
     default:

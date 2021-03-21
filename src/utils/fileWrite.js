@@ -21,18 +21,21 @@ function writeData(filePath, data) {
 }
 
 function appendData(filePath, dataToWrite) {
-  const formattedData = JSON.stringify(dataToWrite, null, 2)
+  return new Promise(async (resolve) => {
+    fs.readFile(filePath, async function (err, data) {
+      let result = JSON.parse(data)
 
-  fs.readFile(filePath, function (err, data) {
-    let result = JSON.parse(data)
+      result.answers.push(dataToWrite)
 
-    result.answers.push(dataToWrite)
+      let extendedData = JSON.stringify(result)
 
-    let extendedData = JSON.stringify(result)
+      await fs.writeFile(filePath, extendedData, complete)
 
-    fs.writeFile(filePath, extendedData, function (err) {
-      if (err) throw err
-      console.log('The data was appended to file!')
+      function complete(error) {
+        console.log('The data was appended to file!')
+        if (error) throw error
+        resolve('data write complete')
+      }
     })
   })
 }
