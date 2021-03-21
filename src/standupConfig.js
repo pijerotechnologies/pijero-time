@@ -4,7 +4,7 @@ const api = require('./api')
 const payloads = require('./payloads')
 
 const { filePaths } = require('./constants')
-const { writeData, readData } = require('./utils/fileWrite')
+const { writeData, readData, appendData } = require('./utils/fileWrite')
 const { json } = require('body-parser')
 
 /*
@@ -26,7 +26,8 @@ const sendConfirmation = async (userId) => {
 }
 
 const sendAnswers = async (usersArray, data) => {
-  const text = JSON.stringify(data.response)
+  const text = JSON.stringify(data)
+  console.log(data)
   // const {user, firstAnswer, secondAnswer, thirdAnswer} = text
 
   usersArray.forEach(async (element) => {
@@ -64,25 +65,20 @@ const handleUserInteraction = async (userId, view) => {
 
   switch (view.callback_id) {
     case 'standup_questions_modal':
+      // data = `USER: ${userId} 1: ${values.what_did_you_do_yesterday.answer.value} 2: ${values.what_will_you_do_today.answer.value} 3: ${values.do_you_have_any_blockers.answer.value}`
       data = {
-        response: {
-          user: userId,
-          firstAnswer: values.what_did_you_do_yesterday.answer.value,
-          secondAnswer: values.what_will_you_do_today.answer.value,
-          thirdAnswer: values.do_you_have_any_blockers.answer.value,
-        },
+        userId,
+        1: values.what_did_you_do_yesterday.answer.value,
+        2: values.what_will_you_do_today.answer.value,
+        3: values.do_you_have_any_blockers.answer.value,
       }
+
       const usersInChannel = await readData('database/data.json').then(
         (data) => data.users_picker_block.users.selected_users,
       )
 
-      console.log('standup answers')
-      console.log(data)
-
       // const formatData = JSON.stringify(data);
-      await writeData('database/answers.json', data).then(() => {
-        console.log('data updated')
-      })
+      await appendData('database/answers.json', data)
 
       let currentAnswers = await readData('database/answers.json')
         .then((data) => data)
@@ -90,8 +86,6 @@ const handleUserInteraction = async (userId, view) => {
           throw new Error('Error reading data: ', error)
         })
 
-      console.log('current Data')
-      console.log(currentAnswers)
       await sendAnswers(usersInChannel, currentAnswers)
 
       break

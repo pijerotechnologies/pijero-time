@@ -20,4 +20,21 @@ function writeData(filePath, data) {
   })
 }
 
-module.exports = { readData, writeData }
+function appendData(filePath, dataToWrite) {
+  const formattedData = JSON.stringify(dataToWrite, null, 2)
+
+  fs.readFile(filePath, function (err, data) {
+    let result = JSON.parse(data)
+
+    result.answers.push(dataToWrite)
+
+    let extendedData = JSON.stringify(result)
+
+    fs.writeFile(filePath, extendedData, function (err) {
+      if (err) throw err
+      console.log('The data was appended to file!')
+    })
+  })
+}
+
+module.exports = { readData, writeData, appendData }
