@@ -5,6 +5,7 @@ const payloads = require('./payloads')
 
 const { filePaths } = require('./constants')
 const { writeData, readData } = require('./utils/fileWrite')
+const { json } = require('body-parser')
 
 /*
  *  Send standupconfig creation confirmation via
@@ -25,19 +26,20 @@ const sendConfirmation = async (userId) => {
 }
 
 const sendAnswers = async (usersArray, data) => {
-  
+  const text = JSON.stringify(data.response)
+  // const {user, firstAnswer, secondAnswer, thirdAnswer} = text
+
   usersArray.forEach(async (element) => {
     let message = payloads.answersSummary({
       channel_id: element,
-      content: JSON.stringify(data.response),
+      content: text,
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
     debug('sendConfirmation: %o', result)
+    console.log(result)
     // return res.send('')
   })
-
-
 }
 
 const initStandupQuestions = async (usersArray) => {
@@ -51,9 +53,6 @@ const initStandupQuestions = async (usersArray) => {
     debug('sendConfirmation: %o', result)
     // return res.send('')
   })
-
- 
-
 }
 
 // Create helpdesk standupconfig. Call users.find to get the user's email address
@@ -76,23 +75,25 @@ const handleUserInteraction = async (userId, view) => {
       const usersInChannel = await readData('database/data.json').then(
         (data) => data.users_picker_block.users.selected_users,
       )
+
       console.log('standup answers')
+      console.log(data)
+
       // const formatData = JSON.stringify(data);
-      await writeData('database/answers.json', data)
+      await writeData('database/answers.json', data).then(() => {
+        console.log('data updated')
+      })
 
-      // await fs.appendFile("database/answers.json", formatData, callback);
-      // function callback(err) {
-      //   console.log(`err ${err}`);
-      // }
+      let currentAnswers = await readData('database/answers.json')
+        .then((data) => data)
+        .catch((error) => {
+          throw new Error('Error reading data: ', error)
+        })
 
+      console.log('current Data')
+      console.log(currentAnswers)
+      await sendAnswers(usersInChannel, currentAnswers)
 
-      // let currentAnswers = await readData('database/answers.json').then(
-      //   (data) => data,
-      // )
-      // console.log('CURRENT DATA')
-      // console.log(currentAnswers)
-      await sendAnswers(usersInChannel, data)
-  
       break
     default:
       const selectedUsers = values.users_picker_block.users.selected_users
