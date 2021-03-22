@@ -26,9 +26,20 @@ const sendConfirmation = async (userId) => {
 }
 
 const sendAnswers = async (usersArray, data) => {
-  const text = JSON.stringify(data)
+  const formattedText = await data.map(async (item) => {
+    console.log(item.userId)
+    const result = await api
+      .callAPIMethod('users.info', {
+        user: item.userId,
+      })
+      .then(() => {
+        return ` user: ${result.user.profile.real_name}`
+      })
+  })
 
-  // const {user, firstAnswer, secondAnswer, thirdAnswer} = text
+  const text = formattedText.join()
+
+  console.log(text)
 
   usersArray.forEach(async (element) => {
     let message = payloads.answersSummary({
