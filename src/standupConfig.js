@@ -7,26 +7,8 @@ const { filePaths } = require('./constants')
 const { writeData, readData, appendData } = require('./utils/fileWrite')
 const { json } = require('body-parser')
 
-/*
- *  Send standupconfig creation confirmation via
- *  chat.postMessage to the user who created it
- */
-const sendConfirmation = async (userId) => {
-  let channel = await api.callAPIMethod('conversations.open', {
-    users: [userId],
-  })
-
-  let message = payloads.confirmation({
-    channel_id: channel.channel.id,
-    title: `selected users: `,
-  })
-
-  let result = await api.callAPIMethod('chat.postMessage', message)
-  debug('sendConfirmation: %o', result)
-}
-
 const sendAnswers = async (usersArray, data) => {
-  const formattedText = await Promise.all(
+  const formattedData = await Promise.all(
     data.map(async (item) => {
       const response = await api.callAPIMethod('users.info', {
         user: item.userId,
@@ -35,16 +17,16 @@ const sendAnswers = async (usersArray, data) => {
     }),
   )
 
-  const text = formattedText.join('\n \n')
+  const formattedMessage = formattedData.join('\n \n')
 
   usersArray.forEach(async (element) => {
     let message = payloads.answersSummary({
       channel_id: element,
-      content: text,
+      content: formattedMessage,
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
-    debug('sendConfirmation: %o', result)
+    debug('sendAnswers: %o', result)
 
     // return res.send('')
   })
@@ -58,13 +40,10 @@ const initStandupQuestions = async (usersArray) => {
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
-    debug('sendConfirmation: %o', result)
+    debug('initStandupQuestions: %o', result)
     // return res.send('')
   })
 }
-
-// Create helpdesk standupconfig. Call users.find to get the user's email address
-// from their user ID
 
 const handleUserInteraction = async (userId, view) => {
   let values = view.state.values
@@ -91,8 +70,6 @@ const handleUserInteraction = async (userId, view) => {
           throw new Error('Error reading data: ', error)
         })
 
-      console.log(currentAnswers)
-
       await sendAnswers(usersInChannel, currentAnswers.answers)
 
       break
@@ -118,14 +95,9 @@ const create = async (userId, view) => {
   }
 
   writeData(filePaths.standupConfig, data)
-
-  await sendConfirmation({
-    userId,
-  })
 }
 
 module.exports = {
-  sendConfirmation,
   handleUserInteraction,
   create,
   initStandupQuestions,
