@@ -37,8 +37,6 @@ const sendAnswers = async (usersArray, data) => {
 
   const text = formattedText.join('\n \n')
 
-  console.log(text)
-
   usersArray.forEach(async (element) => {
     let message = payloads.answersSummary({
       channel_id: element,
