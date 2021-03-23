@@ -113,6 +113,16 @@ module.exports = {
         {
           type: 'section',
           text: {
+            type: 'mrkdwn',
+            text: '*STANDUP SUMMARY*',
+          },
+        },
+        {
+          type: 'divider',
+        },
+        {
+          type: 'section',
+          text: {
             type: 'plain_text',
             text: context.content,
             emoji: true,
