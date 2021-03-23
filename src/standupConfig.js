@@ -26,18 +26,16 @@ const sendConfirmation = async (userId) => {
 }
 
 const sendAnswers = async (usersArray, data) => {
-  const formattedText = await data.map(async (item) => {
-    console.log(item.userId)
-    const result = await api
-      .callAPIMethod('users.info', {
+  const formattedText = await Promise.all(
+    data.map(async (item) => {
+      const response = await api.callAPIMethod('users.info', {
         user: item.userId,
       })
-      .then(() => {
-        return ` user: ${result.user.profile.real_name}`
-      })
-  })
+      return `user: ${response.user.real_name}\n What did you do yesterday: ${item.first}\n, What will you do today: ${item.second}\n,Do you have any blockers: ${item.third}\n`
+    }),
+  )
 
-  const text = formattedText.join()
+  const text = formattedText.join('\n \n')
 
   console.log(text)
 
@@ -49,7 +47,7 @@ const sendAnswers = async (usersArray, data) => {
 
     let result = await api.callAPIMethod('chat.postMessage', message)
     debug('sendConfirmation: %o', result)
-    console.log(result)
+
     // return res.send('')
   })
 }
