@@ -31,7 +31,7 @@ const sendAnswers = async (usersArray, data) => {
       const response = await api.callAPIMethod('users.info', {
         user: item.userId,
       })
-      return `user: ${response.user.real_name}\n What did you do yesterday: ${item.first}\n, What will you do today: ${item.second}\n,Do you have any blockers: ${item.third}\n`
+      return `user: ${response.user.real_name}\n What did you do yesterday: ${item.first}\n What will you do today: ${item.second}\n Do you have any blockers: ${item.third}\n`
     }),
   )
 
