@@ -21,6 +21,7 @@ const cronLogic = () => {
   console.log('cron running')
   readData(filePaths.standupConfig)
     .then((data) => {
+      // currently answers summary message time diff is static
       const standupAnswersDiff = 5
       const timeZone = data.clientTimeZone
       const currentDate = new Date()
@@ -66,6 +67,8 @@ const cronLogic = () => {
           }
 
           if (currentTime === answerSummaryTime) {
+            // @todo extract to a function
+
             const usersInChannel = await readData('database/data.json').then(
               (data) => data.users_picker_block.users.selected_users,
             )
@@ -75,7 +78,9 @@ const cronLogic = () => {
               .catch((error) => {
                 throw new Error('Error reading data: ', error)
               })
-            console.log("it's standup time")
+
+            // @todo delete data after sending
+
             await sendAnswers(usersInChannel, currentAnswers.answers)
           }
         }

@@ -46,6 +46,7 @@ const initStandupQuestions = async (usersArray) => {
 }
 
 const handleUserInteraction = async (userId, view) => {
+  // @todo disable 'start' buttons after the user submitted data or limit user to answer once
   let values = view.state.values
   let data = {}
 
@@ -59,8 +60,6 @@ const handleUserInteraction = async (userId, view) => {
       }
 
       await appendData('database/answers.json', data)
-
-      //@todo check if its 5minutes before standup and send data to the selected users
 
       break
     default:
