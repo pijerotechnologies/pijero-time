@@ -21,6 +21,7 @@ const cronLogic = () => {
   console.log('cron running')
   readData(filePaths.standupConfig)
     .then((data) => {
+      const standupAnswersDiff = 5
       const timeZone = data.clientTimeZone
       const currentDate = new Date()
       const currentWeekday = formatToTimeZone(currentDate, 'dddd', {
@@ -48,15 +49,21 @@ const cronLogic = () => {
               .value
       const standupTime = formatConfiguredTime(standupHour, standupMinutes)
 
+      const minutes =
+        parseInt(standupMinutes.split(':')[1]) - standupAnswersDiff
+
+      const minutesToString = minutes.toString()
+
+      const answerSummaryTime = formatConfiguredTime(
+        standupHour,
+        `00:${minutesToString}`,
+      )
+
       daysPicker.selected_options.map(async (option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
           if (currentTime === reminderTime) {
             initStandupQuestions(data.users_picker_block.users.selected_users)
           }
-          const subtractedDate = subSeconds(currentDate, 300)
-          const answerSummaryTime = formatToTimeZone(subtractedDate, 'HH:mm', {
-            timeZone,
-          })
 
           if (currentTime === answerSummaryTime) {
             const usersInChannel = await readData('database/data.json').then(
