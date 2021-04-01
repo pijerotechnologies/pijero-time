@@ -20,12 +20,12 @@ function writeData(filePath, data) {
   })
 }
 
-function appendData(filePath, dataToWrite) {
+function appendData(filePath, dataToWrite, target) {
   return new Promise(async (resolve) => {
     fs.readFile(filePath, async function (err, data) {
       let result = JSON.parse(data)
 
-      result.answers.push(dataToWrite)
+      result[target].push(dataToWrite)
 
       let extendedData = JSON.stringify(result)
 

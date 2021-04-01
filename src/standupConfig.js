@@ -59,7 +59,7 @@ const handleUserInteraction = async (userId, view) => {
         third: values.do_you_have_any_blockers.answer.value,
       }
 
-      await appendData('database/answers.json', data)
+      await appendData('database/answers.json', data, 'answers')
 
       break
     default:
