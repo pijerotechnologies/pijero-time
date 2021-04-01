@@ -40,6 +40,7 @@ const initStandupQuestions = async (usersArray) => {
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
+    // @todo store 'ts' value for updating the message after the answers were received from the user
     debug('initStandupQuestions: %o', result)
     // return res.send('')
   })
