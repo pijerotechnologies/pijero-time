@@ -11,12 +11,13 @@ const standupconfig = require('./standupConfig')
 const signature = require('./verifySignature')
 const api = require('./api')
 const payloads = require('./payloads')
-const { initStandupQuestions } = require('./standupConfig')
+const { initStandupQuestions, sendAnswers } = require('./standupConfig')
 const { filePaths } = require('./constants')
 const { readData } = require('./utils/fileWrite')
 const { formatConfiguredTime } = require('./utils/time')
 
 const cronLogic = () => {
+  console.log('cron running')
   readData(filePaths.standupConfig)
     .then((data) => {
       const timeZone = data.clientTimeZone
@@ -46,14 +47,25 @@ const cronLogic = () => {
               .value
       const standupTime = formatConfiguredTime(standupHour, standupMinutes)
 
-      daysPicker.selected_options.map((option) => {
+      daysPicker.selected_options.map(async (option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
           if (currentTime === reminderTime) {
             initStandupQuestions(data.users_picker_block.users.selected_users)
           }
           if (currentTime === standupTime) {
             // todo: this should take into account that we want users to get summaries BEFORE the actual standup time
+
+            const usersInChannel = await readData('database/data.json').then(
+              (data) => data.users_picker_block.users.selected_users,
+            )
+
+            let currentAnswers = await readData('database/answers.json')
+              .then((data) => data)
+              .catch((error) => {
+                throw new Error('Error reading data: ', error)
+              })
             console.log("it's standup time")
+            await sendAnswers(usersInChannel, currentAnswers.answers)
           }
         }
       })
@@ -96,6 +108,7 @@ app.get('/', (req, res) => {
  */
 app.post('/command', async (req, res) => {
   // Verify the signing secret
+
   if (!signature.isVerified(req)) {
     debug('Verification token mismatch')
     return res.status(404).send()
@@ -113,6 +126,7 @@ app.post('/command', async (req, res) => {
   let result = await api.callAPIMethod('views.open', view)
 
   debug('views.open: %o', result)
+
   return res.send('')
 })
 
@@ -129,7 +143,6 @@ app.post('/interactive', async (req, res) => {
 
   const body = JSON.parse(req.body.payload)
 
-  
   switch (body.type) {
     case 'block_actions':
       let view = payloads.standupQuestions({
@@ -137,7 +150,6 @@ app.post('/interactive', async (req, res) => {
       })
 
       let result = await api.callAPIMethod('views.open', view)
-
 
       debug('views.open: %o', result)
       return res.send('')

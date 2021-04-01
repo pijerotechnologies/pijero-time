@@ -58,19 +58,9 @@ const handleUserInteraction = async (userId, view) => {
         third: values.do_you_have_any_blockers.answer.value,
       }
 
-      const usersInChannel = await readData('database/data.json').then(
-        (data) => data.users_picker_block.users.selected_users,
-      )
-
       await appendData('database/answers.json', data)
 
-      let currentAnswers = await readData('database/answers.json')
-        .then((data) => data)
-        .catch((error) => {
-          throw new Error('Error reading data: ', error)
-        })
-
-      await sendAnswers(usersInChannel, currentAnswers.answers)
+      //@todo check if its 5minutes before standup and send data to the selected users
 
       break
     default:
@@ -101,4 +91,5 @@ module.exports = {
   handleUserInteraction,
   create,
   initStandupQuestions,
+  sendAnswers,
 }
