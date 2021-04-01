@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const debug = require('debug')('slash-command-template:index')
 const app = express()
 const cron = require('node-cron')
+const { subSeconds, parseISO } = require('date-fns')
 const { formatToTimeZone } = require('date-fns-timezone')
 
 const standupconfig = require('./standupConfig')
@@ -52,9 +53,12 @@ const cronLogic = () => {
           if (currentTime === reminderTime) {
             initStandupQuestions(data.users_picker_block.users.selected_users)
           }
-          if (currentTime === standupTime) {
-            // todo: this should take into account that we want users to get summaries BEFORE the actual standup time
+          const subtractedDate = subSeconds(currentDate, 300)
+          const answerSummaryTime = formatToTimeZone(subtractedDate, 'HH:mm', {
+            timeZone,
+          })
 
+          if (currentTime === answerSummaryTime) {
             const usersInChannel = await readData('database/data.json').then(
               (data) => data.users_picker_block.users.selected_users,
             )
