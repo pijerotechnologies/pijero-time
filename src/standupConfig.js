@@ -4,7 +4,12 @@ const api = require('./api')
 const payloads = require('./payloads')
 
 const { filePaths } = require('./constants')
-const { writeData, readData, appendData } = require('./utils/fileWrite')
+const {
+  writeData,
+  readData,
+  appendData,
+  addData,
+} = require('./utils/fileWrite')
 const { json } = require('body-parser')
 
 const sendAnswers = async (usersArray, data) => {
@@ -40,7 +45,13 @@ const initStandupQuestions = async (usersArray) => {
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
-    // @todo store 'ts' value for updating the message after the answers were received from the user
+
+    await addData(
+      'database/utils.json',
+      result.message.ts,
+      'answers_summary_btn_timestamp',
+    )
+
     debug('initStandupQuestions: %o', result)
     // return res.send('')
   })

@@ -20,6 +20,26 @@ function writeData(filePath, data) {
   })
 }
 
+function addData(filePath, dataToWrite, target) {
+  return new Promise(async (resolve) => {
+    fs.readFile(filePath, async function (err, data) {
+      let result = JSON.parse(data)
+
+      result[target] = dataToWrite
+
+      let extendedData = JSON.stringify(result)
+
+      await fs.writeFile(filePath, extendedData, complete)
+
+      function complete(error) {
+        console.log('The data was added to file!')
+        if (error) throw error
+        resolve('data write complete')
+      }
+    })
+  })
+}
+
 function appendData(filePath, dataToWrite, target) {
   return new Promise(async (resolve) => {
     fs.readFile(filePath, async function (err, data) {
@@ -40,4 +60,4 @@ function appendData(filePath, dataToWrite, target) {
   })
 }
 
-module.exports = { readData, writeData, appendData }
+module.exports = { readData, writeData, appendData, addData }
