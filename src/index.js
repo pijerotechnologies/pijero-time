@@ -8,6 +8,8 @@ const cron = require('node-cron')
 const { subSeconds, parseISO } = require('date-fns')
 const { formatToTimeZone } = require('date-fns-timezone')
 
+const { writeData } = require('./utils/fileWrite')
+
 const standupconfig = require('./standupConfig')
 const signature = require('./verifySignature')
 const api = require('./api')
@@ -69,19 +71,22 @@ const cronLogic = () => {
           if (currentTime === answerSummaryTime) {
             // @todo extract to a function
 
-            const usersInChannel = await readData('database/data.json').then(
+            const usersInChannel = await readData(filePaths.standupConfig).then(
               (data) => data.users_picker_block.users.selected_users,
             )
 
-            let currentAnswers = await readData('database/answers.json')
+            let currentAnswers = await readData(filePaths.summaryData)
               .then((data) => data)
               .catch((error) => {
                 throw new Error('Error reading data: ', error)
               })
 
-            // @todo delete data after sending
-
             await sendAnswers(usersInChannel, currentAnswers.answers)
+
+            // Reset data after sending
+            const overwriteData = { answers: [] }
+
+            writeData(filePaths.summaryData, overwriteData)
           }
         }
       })
