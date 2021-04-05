@@ -3,9 +3,10 @@
 ## Creating a standup config using a Slash Command and a Dialog Modal
 
 Use a slash command and a dialog to create a standup configuration. Once the standup is setup the selected users will receive an alert asking to answer 3 standup questions:
-1: What did you do yesterday?
-2: What will you do today?
-3: Do you have any blockers?
+
+- What did you do yesterday?
+- What will you do today?
+- Do you have any blockers?
 
 Answers are saved on DB and will be sent to all of the initially selected users 5 minutes before standup as a summary
 
