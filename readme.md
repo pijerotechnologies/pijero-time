@@ -1,10 +1,13 @@
 # Standup Configuration And Summary Collection Helper
 
-## Creating a standup config using a Slash Command and a ~~Dialog~~ Modal
+## Creating a standup config using a Slash Command and a Dialog Modal
 
-Use a slash command and a dialog to create a helpdesk ticket in a 3rd-party system. Once it has been created, send a message to the user with information about their ticket.
+Use a slash command and a dialog to create a standup configuration. Once the standup is setup the selected users will receive an alert asking to answer 3 standup questions:
+1: What did you do yesterday?
+2: What will you do today?
+3: Do you have any blockers?
 
-![helpdesk-dialog](https://user-images.githubusercontent.com/700173/30929774-5fe9f0e2-a374-11e7-958e-0d8c362f89a3.gif)
+Answers are saved on DB and will be sent to all of the initially selected users 5 minutes before standup as a summary
 
 ## Setup
 
