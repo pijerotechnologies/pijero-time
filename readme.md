@@ -21,6 +21,7 @@ Answers are saved on DB and will be sent to all of the initially selected users 
    - `commands`
    - `chat:write`
    - `users:read`
+   - `incoming-webhook`
    - `users:read.email`
    - `im:write`
 5. Click 'Save Changes' and install the app (You should get an OAuth access token after the installation)
