@@ -1,8 +1,6 @@
-# Slash Command and ~~Dialogs~~ Modals blueprint
+# Standup Configuration And Summary Collection Helper
 
-> :sparkles: _Updated October 2019: As we have introduced some new features, this tutorial and the code samples have been updated! All the changes from the previous version of this example, read the [DIFF.md](DIFF.md)_
-
-## Creating a helpdesk ticket using a Slash Command and a ~~Dialog~~ Modal
+## Creating a standup config using a Slash Command and a ~~Dialog~~ Modal
 
 Use a slash command and a dialog to create a helpdesk ticket in a 3rd-party system. Once it has been created, send a message to the user with information about their ticket.
 
@@ -27,12 +25,10 @@ Use a slash command and a dialog to create a helpdesk ticket in a 3rd-party syst
 
 1. Go back to the app settings and click on Slash Commands.
 1. Click the 'Create New Command' button and fill in the following:
-   - Command: `/helpdesk`
+   - Command: `/start-pijero-time` or just type any command name you want
    - Request URL: Your server or Glitch URL + `/command`
-   - Short description: `Create a helpdesk ticket`
-   - Usage hint: `[the problem you're having]`
-
-If you did "Remix" on Glitch, it auto-generate a new URL with two random words, so your Request URL should be like: `https://fancy-feast.glitch.me/command`.
+   - Short description: `Standup helper`
+   - Usage hint: `[init standup configuration]`
 
 #### Enable Interactive Components
 
@@ -40,24 +36,19 @@ If you did "Remix" on Glitch, it auto-generate a new URL with two random words, 
 1. Set the Request URL to your server or Glitch URL + `/interactive`.
 1. Save the change.
 
-### Set Your Credentials
+#### Enable Beta Features (this is needed for date picker)
 
-1. Set the following environment variables to `.env` (see `.env.sample`):
-   - `SLACK_ACCESS_TOKEN`: Your bot token, `xoxb-` (available on the **OAuth & Permissions** once you install the app)
-   - `SLACK_SIGNING_SECRET`: Your app's Signing Secret (available on the **Basic Information** page)
-2. If you're running the app locally, run the app (`npm start`). Or if you're using Glitch, it automatically starts the app.
+1. Go back to the app settings and click on Beta Features on the sidebar.
+1. Enable Beta Features.
+1. Save the change.
 
 #### Run the app
 
 1. Get the code
    - Clone this repo and run `npm install`
-2. Set the following environment variables to `.env` (see `.env.sample`):
+2. Set the following environment variables to `.env`.
    - `SLACK_ACCESS_TOKEN`: Your bot token, `xoxb-` (available on the **OAuth & Permissions** once you install the app)
    - `SLACK_SIGNING_SECRET`: Your app's Signing Secret (available on the **Basic Information** page)
 3. If you're running the app locally, run the app (`npm start`).
 
 If you want to run it locally, I recommend creating a localhost tunnel with [ngrok](https://ngrok.com)!
-
-### App Flow Diagram
-
-![diagram](https://api.slack.com/dev-cdn/v1568133600/img/api/articles/blueprints/slash_command_and_dialogs.png)
