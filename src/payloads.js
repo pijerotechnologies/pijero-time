@@ -33,6 +33,29 @@ module.exports = {
       ]),
     }
   },
+  updatedMessage: (context) => {
+    return {
+      channel: context.channel_id,
+      ts: context.time_stamp,
+      blocks: JSON.stringify([
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text:
+              'Get your team up to speed by answering a few standup questions',
+          },
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: 'Thank you for submitting!',
+          },
+        },
+      ]),
+    }
+  },
   standupQuestions: (context) => {
     return {
       trigger_id: context.trigger_id,

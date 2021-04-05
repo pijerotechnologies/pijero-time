@@ -48,7 +48,7 @@ const initStandupQuestions = async (usersArray) => {
 
     await addData(
       'database/utils.json',
-      result.message.ts,
+      { ts: result.ts, channel: result.channel },
       'answers_summary_btn_timestamp',
     )
 
@@ -73,12 +73,29 @@ const handleUserInteraction = async (userId, view) => {
 
       await appendData('database/answers.json', data, 'answers')
 
+      updateMessage('answers_summary_btn_timestamp', userId)
+
       break
     default:
       const selectedUsers = values.users_picker_block.users.selected_users
       await initStandupQuestions(selectedUsers)
       await writeData('database/data.json', values)
   }
+}
+
+const updateMessage = async (target, userId) => {
+  const timeStampToUpdate = await readData(filePaths.utils).then(
+    (data) => data[target],
+  )
+
+  let message = payloads.updatedMessage({
+    channel_id: timeStampToUpdate.channel,
+    time_stamp: timeStampToUpdate.ts,
+  })
+
+  let result = await api.callAPIMethod('chat.update', message)
+
+  debug('sendAnswers: %o', result)
 }
 
 const create = async (userId, view) => {
