@@ -155,6 +155,10 @@ app.post('/command', async (req, res) => {
   return res.send('')
 })
 
+app.get('/test', async (req, res) => {
+  response.write('test path!')
+})
+
 /*
  * Endpoint to receive interactive submissions
  */
