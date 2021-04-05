@@ -156,7 +156,7 @@ app.post('/command', async (req, res) => {
 })
 
 app.get('/test', async (req, res) => {
-  res.write('test path!')
+  res.send('test path')
 })
 
 /*
