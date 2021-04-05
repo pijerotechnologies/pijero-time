@@ -141,6 +141,13 @@ module.exports = {
           },
         },
         {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `DATE: ${context.date}`,
+          },
+        },
+        {
           type: 'divider',
         },
         {

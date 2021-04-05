@@ -55,7 +55,9 @@ const cronLogic = () => {
       const minutes =
         parseInt(standupMinutes.split(':')[1]) - standupAnswersDiff
 
-      const minutesToString = minutes.toString()
+      const minutesInDoubleDigits = ('0' + minutes).slice(-2)
+
+      const minutesToString = minutesInDoubleDigits.toString()
 
       const answerSummaryTime = formatConfiguredTime(
         standupHour,
@@ -71,6 +73,8 @@ const cronLogic = () => {
           if (currentTime === answerSummaryTime) {
             // @todo extract to a function
 
+            console.log('send summary')
+
             const usersInChannel = await readData(filePaths.standupConfig).then(
               (data) => data.users_picker_block.users.selected_users,
             )
@@ -84,9 +88,7 @@ const cronLogic = () => {
             await sendAnswers(usersInChannel, currentAnswers.answers)
 
             // Reset data after sending
-            const overwriteData = { answers: [] }
-
-            writeData(filePaths.summaryData, overwriteData)
+            writeData(filePaths.summaryData, { answers: [] })
           }
         }
       })

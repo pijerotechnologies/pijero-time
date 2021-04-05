@@ -1,5 +1,5 @@
 const debug = require('debug')('slash-command-template:standupconfig')
-
+const { format } = require('date-fns')
 const api = require('./api')
 const payloads = require('./payloads')
 
@@ -24,13 +24,17 @@ const sendAnswers = async (usersArray, data) => {
 
   const formattedMessage = formattedData.join('\n \n')
 
+  const currentDate = format(new Date(), 'MM/dd/yyyy')
+
   usersArray.forEach(async (element) => {
     let message = payloads.answersSummary({
       channel_id: element,
+      date: currentDate,
       content: formattedMessage,
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
+    console.log(result)
     debug('sendAnswers: %o', result)
 
     // return res.send('')
@@ -58,7 +62,6 @@ const initStandupQuestions = async (usersArray) => {
 }
 
 const handleUserInteraction = async (userId, view) => {
-  // @todo disable 'start' buttons after the user submitted data or limit user to answer once
   let values = view.state.values
   let data = {}
 
