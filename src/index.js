@@ -10,11 +10,10 @@ const { formatToTimeZone } = require('date-fns-timezone')
 
 const { writeData } = require('./utils/fileWrite')
 
-const standupconfig = require('./standupConfig')
+const standupFunctions = require('./standupFunctions')
 const signature = require('./verifySignature')
 const api = require('./api')
 const payloads = require('./payloads')
-const { initStandupQuestions, sendAnswers } = require('./standupConfig')
 const { filePaths } = require('./constants')
 const { readData } = require('./utils/fileWrite')
 const { formatConfiguredTime } = require('./utils/time')
@@ -67,12 +66,12 @@ const cronLogic = () => {
       daysPicker.selected_options.map(async (option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
           if (currentTime === reminderTime) {
-            initStandupQuestions(data.users_picker_block.users.selected_users)
+            standupFunctions.initStandupQuestions(
+              data.users_picker_block.users.selected_users,
+            )
           }
 
           if (currentTime === answerSummaryTime) {
-            // @todo extract to a function
-
             console.log('send summary')
 
             const usersInChannel = await readData(filePaths.standupConfig).then(
@@ -85,7 +84,10 @@ const cronLogic = () => {
                 throw new Error('Error reading data: ', error)
               })
 
-            await sendAnswers(usersInChannel, currentAnswers.answers)
+            await standupFunctions.sendAnswers(
+              usersInChannel,
+              currentAnswers.answers,
+            )
 
             // Reset data after sending
             writeData(filePaths.summaryData, { answers: [] })
@@ -126,7 +128,7 @@ app.get('/', (req, res) => {
 })
 
 /*
- * Endpoint to receive /helpdesk slash command from Slack.
+ * Endpoint to receive slash command from Slack.
  * Checks verification token and opens a dialog to capture more info.
  */
 app.post('/command', async (req, res) => {
@@ -154,8 +156,7 @@ app.post('/command', async (req, res) => {
 })
 
 /*
- * Endpoint to receive the dialog submission. Checks the verification token
- * and creates a Helpdesk standupconfig
+ * Endpoint to receive interactive submissions
  */
 app.post('/interactive', async (req, res) => {
   // Verify the signing secret
@@ -178,14 +179,15 @@ app.post('/interactive', async (req, res) => {
       return res.send('')
 
     case 'view_submission':
+      // using callback_id to identify interactive action
       switch (body.view.callback_id) {
         case 'standup_config':
           res.send('')
-          standupconfig.create(body.user.id, body.view)
+          standupFunctions.create(body.user.id, body.view)
           break
         case 'standup_questions_modal':
           res.send('')
-          standupconfig.handleUserInteraction(body.user.id, body.view)
+          standupFunctions.handleUserInteraction(body.user.id, body.view)
           break
       }
 

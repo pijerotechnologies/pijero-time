@@ -34,10 +34,7 @@ const sendAnswers = async (usersArray, data) => {
     })
 
     let result = await api.callAPIMethod('chat.postMessage', message)
-    console.log(result)
     debug('sendAnswers: %o', result)
-
-    // return res.send('')
   })
 }
 
@@ -57,7 +54,6 @@ const initStandupQuestions = async (usersArray) => {
     )
 
     debug('initStandupQuestions: %o', result)
-    // return res.send('')
   })
 }
 
@@ -98,7 +94,7 @@ const updateMessage = async (target, userId) => {
 
   let result = await api.callAPIMethod('chat.update', message)
 
-  debug('sendAnswers: %o', result)
+  debug('updateMessage: %o', result)
 }
 
 const create = async (userId, view) => {
