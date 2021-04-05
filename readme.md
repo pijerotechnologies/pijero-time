@@ -30,14 +30,14 @@ Answers are saved on DB and will be sent to all of the initially selected users 
 1. Go back to the app settings and click on Slash Commands.
 1. Click the 'Create New Command' button and fill in the following:
    - Command: `/start-pijero-time` or just type any command name you want
-   - Request URL: Your server or Glitch URL + `/command`
+   - Request URL: Your server or Local url using [ngrok](https://ngrok.com) + `/command`
    - Short description: `Standup helper`
    - Usage hint: `[init standup configuration]`
 
 #### Enable Interactive Components
 
 1. Go back to the app settings and click on Interactive Components.
-1. Set the Request URL to your server or Glitch URL + `/interactive`.
+1. Set the Request URL to your server or Local url using [ngrok](https://ngrok.com) + `/interactive`.
 1. Save the change.
 
 #### Enable Beta Features (this is needed for date picker)
