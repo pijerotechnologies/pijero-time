@@ -4,7 +4,6 @@ async function readData(file) {
   const data = await fs.readFileSync(file)
 
   const formattedData = JSON.parse(data)
-
   return formattedData
 }
 

@@ -74,9 +74,11 @@ const cronLogic = () => {
           if (currentTime === answerSummaryTime) {
             console.log('send summary')
 
-            const usersInChannel = await readData(filePaths.standupConfig).then(
-              (data) => data.users_picker_block.users.selected_users,
-            )
+            const usersInChannel = await readData(filePaths.standupConfig)
+              .then((data) => data.users_picker_block.users.selected_users)
+              .catch((error) => {
+                throw new Error('Error reading users in the channel: ', error)
+              })
 
             let currentAnswers = await readData(filePaths.summaryData)
               .then((data) => data)
@@ -96,7 +98,7 @@ const cronLogic = () => {
       })
     })
     .catch((error) => {
-      throw new Error('Error reading data: ', error)
+      console.log('Error reading data: ', error)
     })
 }
 
