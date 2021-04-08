@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const debug = require('debug')('slash-command-template:index')
 const app = express()
 const cron = require('node-cron')
-const { subSeconds, parseISO } = require('date-fns')
+const { subSeconds, format, sub, parseISO } = require('date-fns')
 const { formatToTimeZone } = require('date-fns-timezone')
 
 const { writeData } = require('./utils/fileWrite')
@@ -32,6 +32,7 @@ const cronLogic = () => {
       const currentTime = formatToTimeZone(currentDate, 'HH:mm', {
         timeZone,
       })
+
       const daysPicker = data.days_picker_block.days_picker
       const reminderHour =
         data.reminder_picker_block.reminder_time.selected_time
@@ -54,14 +55,23 @@ const cronLogic = () => {
       const minutes =
         parseInt(standupMinutes.split(':')[1]) - standupAnswersDiff
 
-      const minutesInDoubleDigits = ('0' + minutes).slice(-2)
+      const parsedFormattedDate = formatToTimeZone(currentDate, 'YYYY-MM-DD', {
+        timeZone,
+      })
 
-      const minutesToString = minutesInDoubleDigits.toString()
-
-      const answerSummaryTime = formatConfiguredTime(
-        standupHour,
-        `00:${minutesToString}`,
+      const currentUserFormattedHoursAndMinutes = parseISO(
+        `${parsedFormattedDate}T${standupTime}`,
       )
+
+      const subtractedTime = sub(currentUserFormattedHoursAndMinutes, {
+        minutes: 5,
+      })
+
+      // due to date-fns parseISO default parsing to the current time zone we need to formatToTimeZone time once again after parsing
+
+      const answerSummaryTime = formatToTimeZone(subtractedTime, 'HH:mm', {
+        timeZone,
+      })
 
       daysPicker.selected_options.map(async (option) => {
         if (currentWeekday.toLocaleLowerCase() === option.value) {
